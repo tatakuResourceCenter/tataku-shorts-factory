@@ -1,0 +1,15 @@
+# 비밀 — 절대 올리지 않는다
+apikey.txt
+*.key
+.env
+
+# 생성물
+voice/
+*.wav
+*.mp4
+__pycache__/
+*.pyc
+오류기록.txt
+
+# 개인 설정
+voices.json
