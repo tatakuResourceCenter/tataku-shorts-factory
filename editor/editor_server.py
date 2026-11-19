@@ -27,17 +27,58 @@ sys.path.insert(0, str(BASE))
 
 import shorts_tts as engine          # noqa: E402
 import shorts_layout as layout_mod   # noqa: E402
+import variety                       # noqa: E402
 
 PORT = 8765
-VERSION = "2026.11.19-3"
+VERSION = "2026.11.20-1"
 WEB = BASE / "web"
 CLIPS = BASE / "clips"
-OUT = BASE / "output"
 REFS = BASE / "refs"
-SCRIPT_FILE = BASE / "대본.json"
-LAYOUT_FILE = BASE / "구성.json"
-for p in (CLIPS, OUT, REFS, engine.OUTDIR):
-    p.mkdir(exist_ok=True)
+RANK = BASE / "랭킹"                  # 랭킹 편집기 작업 칸
+VAR = BASE / "예능"                   # 예능 편집기 작업 칸
+OUT = RANK / "output"
+SCRIPT_FILE = RANK / "대본.json"
+LAYOUT_FILE = RANK / "구성.json"
+VAR_EDIT = VAR / "편집.json"
+VAR_SRC = VAR / "원본"
+VAR_OUT = VAR / "output"
+
+
+def migrate_layout():
+    """예전(한 폴더) 구조였다면 랭킹 작업을 랭킹/ 으로 옮긴다. 옮기기 전에 설정 파일은 백업."""
+    old = [BASE / n for n in ("구성.json", "대본.json", "업로드정보.json", "타임라인.json", "자막.srt")]
+    if not (BASE / "구성.json").exists() or (RANK / "구성.json").exists():
+        return
+    import time as _t
+    bak = BASE / "보관함" / f"_구조변경_백업_{_t.strftime('%y%m%d_%H%M')}"
+    bak.mkdir(parents=True, exist_ok=True)
+    RANK.mkdir(exist_ok=True)
+    for f in old:
+        if f.exists():
+            shutil.copy2(f, bak / f.name)
+            shutil.move(str(f), str(RANK / f.name))
+    for name in ("output", "voice"):
+        src, dst = BASE / name, RANK / name
+        if src.is_dir():
+            dst.mkdir(exist_ok=True)
+            for x in list(src.iterdir()):
+                shutil.move(str(x), str(dst / x.name))
+            try:
+                src.rmdir()
+            except OSError:
+                pass
+    print(f"🗂 랭킹 작업을 랭킹/ 폴더로 옮겼어요 (설정 백업: 보관함/{bak.name})", flush=True)
+
+
+migrate_layout()
+engine.OUTDIR = RANK / "voice"
+for p in (CLIPS, REFS, RANK, OUT, engine.OUTDIR, VAR, VAR_SRC, VAR_OUT, VAR / "voice"):
+    p.mkdir(parents=True, exist_ok=True)
+
+engine.VOICES.setdefault("vnarr", "")
+engine.LABEL["vnarr"] = "예능 내레이터"
+engine.VOICE_QUERIES["vnarr"] = "재치 있고 빠른 템포의 한국어 예능 내레이션, 유튜브 쇼츠 해설용"
+ROLES = ("narr", "cat", "vnarr")
 
 DEFAULT_SCRIPT = []
 SCRIPT_KEYS = ("speaker", "text", "emotion", "intensity", "speed", "pitch", "slot")
@@ -67,9 +108,57 @@ def save_json(path, data):
     Path(path).write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
-UPLOAD_FILE = BASE / "업로드정보.json"
+UPLOAD_FILE = RANK / "업로드정보.json"
+
+MODES = {
+    "ranking": {"script": SCRIPT_FILE, "upload": UPLOAD_FILE, "out": OUT, "voice": RANK / "voice",
+                "roles": ("narr", "cat"), "final": "완성본.mp4"},
+    "variety": {"script": VAR / "대본.json", "upload": VAR / "업로드정보.json", "out": VAR_OUT,
+                "voice": VAR / "voice", "roles": ("vnarr",), "final": "예능_완성본.mp4"},
+}
+
+
+def M(mode):
+    return MODES.get(mode or "ranking", MODES["ranking"])
+
+
+def load_edit():
+    return variety.normalize(load_json(VAR_EDIT, variety.DEFAULT_EDIT))
+
+
+def times_for(mode):
+    return variety.seg_times(load_edit()) if mode == "variety" else clip_times(load_layout())
 STYLE_KEYS = ("title1", "title1Color", "title2", "title2Color", "sub", "subColor", "bandHeight",
               "ranking", "order", "numColors", "keepAudio", "ref", "voiceEmo")
+
+
+def reset_variety():
+    import re as _re, time as _t
+    ed = load_edit()
+    stem = _re.sub(r'[\\/:*?"<>|\s]+', "_", ed.get("title1") or "예능").strip("_")[:30] or "예능"
+    arc = BASE / "보관함" / f"{_t.strftime('%y%m%d_%H%M')}_예능_{stem}"
+    arc.mkdir(parents=True, exist_ok=True)
+
+    def move(src, dst):
+        if src.exists():
+            dst.parent.mkdir(parents=True, exist_ok=True)
+            shutil.move(str(src), str(dst))
+    if VAR_EDIT.exists():
+        shutil.copy2(VAR_EDIT, arc / VAR_EDIT.name)
+    for f in (VAR / "대본.json", VAR / "업로드정보.json"):
+        move(f, arc / f.name)
+    for p in list(VAR_OUT.iterdir()):
+        move(p, arc / "output" / p.name)
+    for p in list((VAR / "voice").glob("*.wav")):
+        move(p, arc / "voice" / p.name)
+    if ed.get("source"):
+        move(VAR_SRC / ed["source"], arc / "원본" / ed["source"])
+    shutil.rmtree(VAR / "_작업", ignore_errors=True)
+    new = {k: ed[k] for k in ("title1Color", "title2Color", "videoTop", "videoH")}
+    save_json(VAR_EDIT, variety.normalize(new))
+    save_json(VAR / "대본.json", [])
+    log(f"🗂 지난 예능 작업을 보관함/{arc.name} 으로 옮겼어요. 새 예능 쇼츠를 시작해요!")
+    return arc.name
 
 
 def reset_project():
@@ -85,7 +174,7 @@ def reset_project():
             dst.parent.mkdir(parents=True, exist_ok=True)
             shutil.move(str(src), str(dst))
     shutil.copy2(LAYOUT_FILE, arc / LAYOUT_FILE.name) if LAYOUT_FILE.exists() else None
-    for f in (SCRIPT_FILE, UPLOAD_FILE, BASE / "타임라인.json", BASE / "자막.srt"):
+    for f in (SCRIPT_FILE, UPLOAD_FILE, RANK / "타임라인.json", RANK / "자막.srt"):
         move(f, arc / f.name)
     for p in list(OUT.iterdir()):
         move(p, arc / "output" / p.name)
@@ -145,7 +234,7 @@ def connect():
 
 def restore_voices():
     saved = load_json(engine.VOICE_FILE, {})
-    for role in ("narr", "cat"):
+    for role in ROLES:
         vid = saved.get(role)
         if not vid:
             continue
@@ -197,15 +286,16 @@ def voice_name(vid):
     return vid
 
 
-def state_payload():
+def state_payload(mode="ranking"):
+    m = M(mode)
     voices = {}
-    for role in ("narr", "cat"):
+    for role in ROLES:
         vid = engine.VOICES.get(role, "")
         voices[role] = {"id": vid, "name": voice_name(vid),
                         "emotions": sorted(engine.PROFILE.get(role, {}).get("emotions", []))}
     clips = sorted(p.name for p in CLIPS.iterdir()
                    if p.suffix.lower() in (".mp4", ".mov", ".webm", ".mkv"))
-    outs = sorted(p.name for p in OUT.iterdir() if p.suffix.lower() == ".mp4")
+    outs = sorted(p.name for p in m["out"].iterdir() if p.suffix.lower() == ".mp4")
     lay = load_layout()
     byfile = NB.by_file()
     try:
@@ -224,11 +314,15 @@ def state_payload():
         "connected": STATE["connected"], "credits": STATE["credits"], "error": STATE["error"],
         "busy": STATE["busy"], "log": STATE["log"][-12:],
         "voices": voices,
-        "script": resolve_lines(load_json(SCRIPT_FILE, DEFAULT_SCRIPT), lay),
-        "clipTimes": clip_times(lay),
-        "outTimes": {p.name: p.stat().st_mtime for p in OUT.iterdir() if p.is_file()},
-        "upload": load_json(UPLOAD_FILE, None),
-        "scriptStamp": SCRIPT_FILE.stat().st_mtime if SCRIPT_FILE.exists() else 0,
+        "mode": mode if mode in MODES else "ranking", "roles": list(m["roles"]), "final": m["final"],
+        "script": resolve_lines(load_json(m["script"], DEFAULT_SCRIPT), mode),
+        "clipTimes": times_for(mode),
+        "outTimes": {p.name: p.stat().st_mtime for p in m["out"].iterdir() if p.is_file()},
+        "upload": load_json(m["upload"], None),
+        "scriptStamp": m["script"].stat().st_mtime if m["script"].exists() else 0,
+        "edit": load_edit(), "editLength": variety.total_length(load_edit()),
+        "varSources": sorted(p.name for p in VAR_SRC.iterdir()
+                             if p.suffix.lower() in (".mp4", ".mov", ".webm", ".mkv", ".m4v")),
         "layout": lay, "clips": clips, "outputs": outs,
         "layoutLength": layout_mod.total_length(lay),
         "ffmpeg": layout_mod.ffmpeg_ok(),
@@ -249,10 +343,11 @@ def clip_times(lay):
     return out
 
 
-def resolve_lines(lines, lay=None):
-    """줄마다 id 를 붙이고, '몇 위 클립의 몇 초' 를 완성 영상 시각(start)으로 바꾼다."""
+def resolve_lines(lines, mode="ranking"):
+    """줄마다 id 를 붙이고, '몇 위 클립(예능은 구간)의 몇 초' 를 완성 영상 시각(start)으로 바꾼다."""
     import uuid
-    ct = {c["rank"]: c for c in clip_times(lay or load_layout())}
+    ct = {c["rank"]: c for c in times_for(mode)}
+    vdir = M(mode)["voice"]
     for ln in lines:
         ln.setdefault("id", uuid.uuid4().hex[:8])
         ln.setdefault("speed", 1.0)
@@ -261,7 +356,7 @@ def resolve_lines(lines, lay=None):
         if ln.get("clip") in ct:
             ln["start"] = round(ct[ln["clip"]]["start"] + float(ln.get("at") or 0), 2)
         ln["fresh"] = bool(ln.get("file") and ln.get("key") == line_key(ln)
-                           and (engine.OUTDIR / ln["file"]).exists())
+                           and (vdir / ln["file"]).exists())
     return lines
 
 
@@ -270,8 +365,9 @@ def line_key(ln):
                       ensure_ascii=False)
 
 
-def generate_line(i, force=False):
-    lines = resolve_lines(load_json(SCRIPT_FILE, DEFAULT_SCRIPT))
+def generate_line(i, force=False, mode="ranking"):
+    m = M(mode)
+    lines = resolve_lines(load_json(m["script"], DEFAULT_SCRIPT), mode)
     ln = lines[i]
     role = ln["speaker"]
     if not engine.VOICES.get(role):
@@ -281,7 +377,7 @@ def generate_line(i, force=False):
     emo, swapped = engine.resolve_emotion(role, [ln.get("emotion") or "normal", "normal"])
     speed, pitch = float(ln.get("speed") or 1.0), int(ln.get("pitch") or 0)
     slot = float(ln.get("slot") or 0)
-    path = engine.OUTDIR / f"{ln['id']}.wav"
+    path = m["voice"] / f"{ln['id']}.wav"
     tempo = speed
     for _ in range(3):
         audio, dur, words = engine.synth(CLIENT, ln["text"], role, emo,
@@ -297,23 +393,39 @@ def generate_line(i, force=False):
     ln.update(emotion=emo, duration=round(dur, 3), file=path.name, tempo=round(tempo, 3), fit=fit,
               words=[{"text": w.text, "start": w.start, "end": w.end} for w in words])
     ln["key"] = line_key(ln)
-    save_json(SCRIPT_FILE, lines)
-    write_timeline(lines)
+    save_json(m["script"], lines)
+    if mode == "ranking":
+        write_timeline(lines)
     log(f"  [{i+1}] {dur:.2f}s" + (f" / {slot:.2f}s 안에 {'✅' if fit else '⚠️ 넘침'}" if slot else ""))
     return {"duration": ln["duration"], "fit": fit, "emotion": emo, "swapped": swapped, "file": path.name}
 
 
-def finish_all():
+def finish_all(mode="ranking"):
     """음성(바뀐 줄만) → 구성 영상 → 더빙 합성까지 한 번에."""
-    lines = resolve_lines(load_json(SCRIPT_FILE, DEFAULT_SCRIPT))
+    m = M(mode)
+    lines = resolve_lines(load_json(m["script"], DEFAULT_SCRIPT), mode)
     todo = [i for i, l in enumerate(lines) if l.get("text", "").strip()]
-    if not todo:
+    if not todo and mode == "ranking":
         raise RuntimeError("대본이 비어 있어요")
     for n, i in enumerate(todo, 1):
         STATE["busy"] = f"음성 만드는 중 {n}/{len(todo)}"
-        generate_line(i)
+        generate_line(i, mode=mode)
     if not layout_mod.ffmpeg_ok():
         raise RuntimeError("영상 도구(ffmpeg)가 없어요. 편집기.bat 을 다시 켜면 설치돼요")
+    if mode == "variety":
+        ed = load_edit()
+        src = VAR_SRC / (ed.get("source") or "_")
+        if not src.exists():
+            raise RuntimeError("예능 원본 영상을 먼저 골라 주세요")
+        lines = resolve_lines(load_json(m["script"], DEFAULT_SCRIPT), mode)
+        STATE["busy"] = "예능 영상 만드는 중"
+        variety.render(ed, src, VAR_OUT / "예능_편집영상.mp4", lines, VAR / "_작업", log)
+        STATE["busy"] = "더빙 합성 중"
+        if any(l.get("file") and l.get("duration") for l in lines):
+            mux_voices(VAR_OUT / "예능_편집영상.mp4", VAR_OUT / m["final"], mode)
+        else:
+            shutil.copy2(VAR_OUT / "예능_편집영상.mp4", VAR_OUT / m["final"])
+        return
     STATE["busy"] = "구성 영상 만드는 중"
     layout_mod.render(load_layout(), CLIPS, OUT / "구성영상.mp4", log)
     STATE["busy"] = "더빙 합성 중"
@@ -340,27 +452,33 @@ def write_timeline(lines):
             o.text, o.start, o.end = w["text"], w["start"], w["end"]
             ws.append(o)
         srt.append((ln["start"], ln["duration"], ln["text"], ws))
-    save_json(BASE / "타임라인.json", meta)
+    save_json(RANK / "타임라인.json", meta)
     if srt:
-        engine.build_srt(srt, str(BASE / "자막.srt"))
+        engine.build_srt(srt, str(RANK / "자막.srt"))
 
 
-def mux_voices(video, out):
-    """원본 소리는 낮추고 그 위에 대사를 얹는다."""
-    lines = [l for l in resolve_lines(load_json(SCRIPT_FILE, [])) if l.get("duration") and l.get("file")
-             and l.get("start") is not None and (engine.OUTDIR / l["file"]).exists()]
+def mux_voices(video, out, mode="ranking"):
+    """랭킹: 원본 소리를 낮추고 대사를 얹는다. 예능: 내레이션 나오는 동안만 원본 소리를 끈다."""
+    m = M(mode)
+    lines = [l for l in resolve_lines(load_json(m["script"], []), mode) if l.get("duration") and l.get("file")
+             and l.get("start") is not None and (m["voice"] / l["file"]).exists()]
     if not lines:
         raise RuntimeError("생성된 대사가 없습니다")
     dur, has_a = layout_mod.probe(video)
     cmd = [layout_mod.FF, "-y", "-v", "error", "-i", str(video)]
     parts, labels = [], []
     for k, ln in enumerate(lines, start=1):
-        f = engine.OUTDIR / ln.get("file", f"{k:02d}_{ln['speaker']}.wav")
+        f = m["voice"] / ln["file"]
         cmd += ["-i", str(f)]
         ms = int(round(float(ln["start"]) * 1000))
         parts.append(f"[{k}:a]adelay={ms}|{ms},aresample=44100,aformat=channel_layouts=stereo[a{k}]")
         labels.append(f"[a{k}]")
-    if has_a:
+    if has_a and mode == "variety":
+        mute = "".join(f"volume=enable='between(t,{float(l['start']) - 0.05:.3f},"
+                       f"{float(l['start']) + float(l['duration']) + 0.1:.3f})':volume=0," for l in lines)
+        parts.append(f"[0:a]{mute}aresample=44100,aformat=channel_layouts=stereo[o]")
+        labels.insert(0, "[o]")
+    elif has_a:
         parts.append("[0:a]volume=0.45,aresample=44100,aformat=channel_layouts=stereo[o]")
         labels.insert(0, "[o]")
     parts.append("".join(labels) + f"amix=inputs={len(labels)}:normalize=0:dropout_transition=0,"
@@ -387,8 +505,9 @@ def run_bg(name, fn):
 PICK_LOCK = threading.Lock()
 
 
-def pick_video():
-    """윈도우 '열기' 창을 띄워 영상을 고르게 한다. 다른 폴더 영상이면 clips 로 복사."""
+def pick_video(target="clips"):
+    """윈도우 '열기' 창을 띄워 영상을 고르게 한다. 다른 폴더 영상이면 clips(예능은 예능/원본)로 복사."""
+    dest = VAR_SRC if target == "variety" else CLIPS
     import shutil
     try:
         import tkinter as tk
@@ -406,7 +525,7 @@ def pick_video():
         root.attributes("-topmost", True)
         root.update()
         f = filedialog.askopenfilename(parent=root, title="영상 고르기 — 보기를 '큰 아이콘'으로 바꾸면 썸네일이 보여요",
-                                       initialdir=str(CLIPS),
+                                       initialdir=str(dest),
                                        filetypes=[("영상", "*.mp4 *.mov *.m4v *.webm *.mkv"), ("모든 파일", "*.*")])
         root.destroy()
     finally:
@@ -414,17 +533,17 @@ def pick_video():
     if not f:
         return {"cancel": True}
     src = Path(f).resolve()
-    if src.parent == CLIPS.resolve():
+    if src.parent == dest.resolve():
         return {"file": src.name}
-    dst = CLIPS / src.name
+    dst = dest / src.name
     if dst.exists() and dst.stat().st_size == src.stat().st_size:
         return {"file": dst.name}
     n = 2
     while dst.exists():
-        dst = CLIPS / f"{src.stem}_{n}{src.suffix}"
+        dst = dest / f"{src.stem}_{n}{src.suffix}"
         n += 1
     shutil.copy2(src, dst)
-    log(f"📂 {src.name} → clips 폴더로 복사")
+    log(f"📂 {src.name} → {dest.relative_to(BASE)} 폴더로 복사")
     return {"file": dst.name, "copied": True}
 
 
@@ -492,17 +611,23 @@ class H(BaseHTTPRequestHandler):
                 return self.send_file(WEB / "index.html")
             if path == "/favicon.ico":
                 return self.send_file(WEB / "img" / "cat.png")
+            if path.startswith("/fonts/"):
+                f = safe_child(WEB / "fonts", path[7:])
+                return self.send_file(f) if f else self.send_error(404)
             if path.startswith("/img/"):
                 f = safe_child(WEB / "img", path[5:])
                 return self.send_file(f) if f else self.send_error(404)
             if path.startswith("/voice/"):
-                f = safe_child(engine.OUTDIR, path[7:])
+                f = safe_child(MODES["ranking"]["voice"], path[7:]) or safe_child(MODES["variety"]["voice"], path[7:])
+                return self.send_file(f) if f else self.send_error(404)
+            if path.startswith("/src/"):
+                f = safe_child(VAR_SRC, path[5:])
                 return self.send_file(f) if f else self.send_error(404)
             if path.startswith("/clips/"):
                 f = safe_child(CLIPS, path[7:])
                 return self.send_file(f) if f else self.send_error(404)
             if path.startswith("/out/"):
-                f = safe_child(OUT, path[5:])
+                f = safe_child(OUT, path[5:]) or safe_child(VAR_OUT, path[5:])
                 return self.send_file(f) if f else self.send_error(404)
             if path == "/api/version":
                 return self.send_json({"version": VERSION})
@@ -510,7 +635,7 @@ class H(BaseHTTPRequestHandler):
                 f = safe_child(REFS, path[6:])
                 return self.send_file(f) if f else self.send_error(404)
             if path == "/api/state":
-                return self.send_json(state_payload())
+                return self.send_json(state_payload((q.get("mode") or ["ranking"])[0]))
             if path == "/api/voices":
                 if not CLIENT:
                     return self.send_json({"error": "타입캐스트에 연결되지 않았습니다"}, 400)
@@ -561,7 +686,25 @@ class H(BaseHTTPRequestHandler):
                 threading.Timer(0.3, lambda: os._exit(0)).start()
                 return self.send_json({"ok": True})
             if path == "/api/pick-video":
-                return self.send_json(pick_video())
+                return self.send_json(pick_video(data.get("target", "clips")))
+            if path == "/api/variety/edit":
+                save_json(VAR_EDIT, variety.normalize(data["edit"]))
+                return self.send_json({"ok": True, "length": variety.total_length(load_edit())})
+            if path == "/api/variety/silence":
+                ed = load_edit()
+                src = VAR_SRC / (ed.get("source") or "_")
+                if not src.exists():
+                    return self.send_json({"error": "원본 영상을 먼저 골라 주세요"}, 400)
+                a, b = float(data.get("a", 0)), float(data.get("b", 0))
+                if b <= a:
+                    b = a + layout_mod.probe(src)[0]
+                db = {"soft": -38, "normal": -32, "tight": -28}.get(data.get("sens"), -32)
+                segs, n = variety.find_speech(src, a, min(b, layout_mod.probe(src)[0]), noise_db=db)
+                ed["segments"] = [s for s in ed["segments"] if float(s["end"]) <= a or float(s["start"]) >= b] + segs
+                ed["range"] = [a, b]
+                save_json(VAR_EDIT, variety.normalize(ed))
+                log(f"✂️ 빈 호흡 {n}곳 → 말하는 구간 {len(segs)}개")
+                return self.send_json({"ok": True, "count": len(segs), "silences": n})
             if path.startswith("/api/sources/"):
                 act = path.rsplit("/", 1)[1]
                 if act == "add":
@@ -594,17 +737,20 @@ class H(BaseHTTPRequestHandler):
             if path == "/api/reset":
                 if STATE["busy"]:
                     return self.send_json({"error": "작업이 끝난 뒤에 눌러 주세요"}, 400)
-                return self.send_json({"ok": True, "archive": reset_project()})
+                fn = reset_variety if data.get("mode") == "variety" else reset_project
+                return self.send_json({"ok": True, "archive": fn()})
             if path == "/api/finish":
                 if not CLIENT:
                     return self.send_json({"error": "타입캐스트에 연결되지 않았습니다"}, 400)
                 if STATE["busy"]:
                     return self.send_json({"error": "다른 작업이 끝나면 눌러 주세요"}, 400)
-                run_bg("한 번에 완성하기", finish_all)
+                mode = data.get("mode", "ranking")
+                run_bg("한 번에 완성하기", lambda: finish_all(mode))
                 return self.send_json({"ok": True})
             if path == "/api/script":
-                save_json(SCRIPT_FILE, [{k: v for k, v in l.items() if k != "fresh"} for l in data["lines"]])
-                return self.send_json({"ok": True, "stamp": SCRIPT_FILE.stat().st_mtime})
+                sf = M(data.get("mode"))["script"]
+                save_json(sf, [{k: v for k, v in l.items() if k != "fresh"} for l in data["lines"]])
+                return self.send_json({"ok": True, "stamp": sf.stat().st_mtime})
             if path == "/api/layout":
                 save_json(LAYOUT_FILE, data["layout"])
                 return self.send_json({"ok": True, "length": layout_mod.total_length(data["layout"])})
@@ -618,9 +764,10 @@ class H(BaseHTTPRequestHandler):
             if path == "/api/generate":
                 if not CLIENT:
                     return self.send_json({"error": "타입캐스트에 연결되지 않았습니다"}, 400)
-                return self.send_json(generate_line(int(data["index"]), bool(data.get("force"))))
+                return self.send_json(generate_line(int(data["index"]), bool(data.get("force")), data.get("mode", "ranking")))
             if path == "/api/open-folder":
-                target = {"clips": CLIPS, "output": OUT, "voice": engine.OUTDIR}.get(
+                target = {"clips": CLIPS, "output": OUT, "voice": engine.OUTDIR, "vout": VAR_OUT,
+                          "vsrc": VAR_SRC}.get(
                     data.get("name"), BASE)
                 if hasattr(os, "startfile"):
                     os.startfile(str(target))

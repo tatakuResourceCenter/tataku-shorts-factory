@@ -19,19 +19,30 @@ body{margin:0;font-family:'Noto Sans KR',system-ui,sans-serif;background:var(--b
 button,input,select{font-family:inherit;font-size:14px}
 a{color:inherit}
 
-/* ── nav ── */
-.nav{position:sticky;top:14px;z-index:20;margin:14px auto 0;max-width:1240px;background:#fff;border-radius:18px;
-  box-shadow:var(--shadow);display:flex;align-items:center;gap:8px;padding:10px 14px}
-.logo{display:flex;align-items:center;gap:10px;font-weight:900;font-size:17px;margin-right:18px}
+/* ── side ── */
+.sidenav{position:fixed;left:14px;top:14px;bottom:14px;width:218px;z-index:20;background:#fff;border-radius:22px;
+  box-shadow:var(--shadow);display:flex;flex-direction:column;gap:3px;padding:16px 12px;overflow-y:auto}
+.logo{display:flex;align-items:center;gap:10px;font-weight:900;font-size:16px;padding:2px 6px 14px}
 .logo img{width:34px;height:34px;object-fit:contain}
-.tab{border:0;background:transparent;padding:9px 16px;border-radius:12px;color:var(--sub);font-weight:500;cursor:pointer}
+.tab{border:0;background:transparent;padding:10px 12px;border-radius:12px;color:var(--sub);font-weight:500;cursor:pointer;
+  display:flex;align-items:center;gap:10px;text-align:left;width:100%}
+.tab i{font-style:normal;width:20px;text-align:center}
+.tab:hover{background:#F6F3FB}
 .tab.on{color:var(--purple);background:var(--purple-soft);font-weight:700}
+.grp{margin-top:12px;border-top:1.5px solid var(--line);padding-top:10px}
+.gh{font-size:12px;font-weight:800;color:var(--ink);padding:2px 10px 6px;display:flex;align-items:center;gap:7px}
+.gdot{width:9px;height:9px;border-radius:50%}
+.grp.vr .tab.on{color:#C62828;background:#FDE7E7}
+.sidenav .status{text-align:center}
+body{padding-left:246px}
 .spacer{flex:1}
 .status{padding:8px 14px;border-radius:12px;font-size:13px;font-weight:700;background:#F1EEF7;color:var(--sub)}
 .status.ok{background:var(--mint-soft);color:#2F8A65}
 .status.bad{background:var(--coral-soft);color:#C4513F}
 
-.wrap{max-width:1240px;margin:0 auto;padding:22px 0 80px}
+.wrap{max-width:1240px;margin:0 auto;padding:22px 22px 80px}
+.mode-badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:800;border-radius:999px;padding:4px 10px;margin-bottom:10px}
+.mode-badge.vr{background:#FDE7E7;color:#C62828}.mode-badge.rk{background:var(--purple-soft);color:var(--purple)}
 .page{display:none}.page.on{display:block}
 
 /* ── common ── */
@@ -133,7 +144,7 @@ input[type=color]{width:30px;height:30px;border:0;background:none;padding:0;curs
 .flow small{color:var(--sub)}
 .brief{display:block;margin-top:12px}.brief>span{display:block;font-size:13px;font-weight:700;margin-bottom:6px}
 .ed{margin-top:18px;position:relative}
-.tbar{display:flex;align-items:flex-end;gap:18px;padding-bottom:14px;border-bottom:1.5px solid var(--line);flex-wrap:wrap;position:sticky;top:64px;background:#fff;z-index:5}
+.tbar{display:flex;align-items:flex-end;gap:18px;padding-bottom:14px;border-bottom:1.5px solid var(--line);flex-wrap:wrap;position:sticky;top:14px;background:#fff;z-index:5}
 .tg{display:flex;flex-direction:column;gap:5px}.tg small{font-size:12px;color:var(--sub)}
 .tg select{width:auto;min-width:110px;padding:8px 10px}
 .tb{border:0;background:#F1EEF5;border-radius:10px;padding:9px 13px;font-weight:700;font-size:14px;cursor:pointer;white-space:nowrap;color:var(--ink)}
@@ -239,6 +250,45 @@ input[type=color]{width:30px;height:30px;border:0;background:none;padding:0;curs
 .up .empty{background:#F7F4FC;border-radius:14px;padding:18px;text-align:center;color:var(--sub);line-height:1.8}
 .next{display:flex;align-items:center;gap:18px;background:linear-gradient(135deg,#FFF6E0,#F3ECFF)}
 
+/* ── 예능 ── */
+.vgrid{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:22px;align-items:start}
+.lb{display:block;font-size:12.5px;color:var(--sub);margin-bottom:6px;font-weight:600}
+.tnum{width:84px}
+.vphone{position:relative;width:360px;height:640px;background:#000;border-radius:26px;overflow:hidden;margin:0 auto;border:6px solid #1E1A2E}
+.vtop{position:absolute;left:0;right:0;top:0;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;z-index:2;padding:0 8px}
+.vtop div{font-family:'BlackHan',sans-serif;font-size:36px;line-height:1.05;text-align:center;white-space:nowrap;-webkit-text-stroke:1.5px #000;paint-order:stroke fill}
+.vvid{position:absolute;left:0;right:0;overflow:hidden;background:#111}
+.vvid video{position:absolute;max-width:none}
+.vbot{position:absolute;left:0;right:0;bottom:0;background:#000;z-index:2}
+.vcap{position:absolute;left:0;right:0;text-align:center;font-weight:900;font-size:22px;color:#fff;-webkit-text-stroke:2.4px #000;paint-order:stroke fill;text-shadow:2px 2px 0 rgba(0,0,0,.55);z-index:3;padding:0 10px}
+.vcap.hook{color:#FF3B30;font-family:'BlackHan',sans-serif;font-size:28px;animation:shake .09s infinite}
+@keyframes shake{0%{transform:translateX(-3px)}50%{transform:translateX(3px)}100%{transform:translateX(-3px)}}
+.vnarr{position:absolute;left:0;right:0;top:12px;text-align:center;font-family:'BlackHan',sans-serif;font-size:25px;color:#F0FF00;-webkit-text-stroke:2px #000;paint-order:stroke fill;padding:0 8px}
+.vcred{position:absolute;right:12px;bottom:14px;font-size:10px;color:#999}
+.tline{position:relative;height:34px;background:#F4F2F8;border-radius:10px;margin-top:14px;overflow:hidden;cursor:pointer}
+.tline b{position:absolute;top:0;bottom:0;border-radius:4px;border:1px solid #fff}
+.tline b.on{outline:2.5px solid var(--ink);z-index:2}
+.tline .ph{position:absolute;top:0;bottom:0;width:2px;background:#E53935;z-index:3}
+.tleg{display:flex;gap:14px;font-size:12px;color:var(--sub);margin:6px 0 10px}.tleg i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:4px;vertical-align:-2px}
+.seg{display:grid;grid-template-columns:32px 150px auto 1fr auto;gap:10px;align-items:center;padding:9px 10px;border-radius:12px;border:1.5px solid transparent;margin-top:6px;background:#FAF9FC}
+.seg.off{opacity:.5}.seg.sel{border-color:var(--ink);background:#fff}
+.seg .n{font-weight:900;color:var(--sub);text-align:center}
+.seg .tm{display:flex;gap:4px;align-items:center;font-size:12px}.seg .tm input{width:64px;padding:5px 6px;font-size:12px}
+.seg .tg2{display:flex;gap:6px}
+.pill2{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:5px 11px;font-size:12.5px;font-weight:700;cursor:pointer;color:var(--sub)}
+.pill2.on{background:var(--mint-soft);border-color:#7CDBA8;color:#2F8A65}.pill2.hk.on{background:#FFF3D6;border-color:#FFB300;color:#A86B00}
+.seg .fr{display:flex;gap:8px;align-items:center;font-size:12px;color:var(--sub)}.seg .fr input{width:90px}
+.seg .ac{display:flex;gap:4px}
+.cap{display:grid;grid-template-columns:auto 70px 1fr auto;gap:8px;align-items:center;margin-top:6px;padding:6px 8px;background:#FAF9FC;border-radius:10px}
+.cap.hk{background:#FFF0EF}
+.cap input{padding:7px 9px;font-size:13px}
+.vcheck div{display:flex;gap:10px;align-items:center;padding:8px 2px;font-size:14px;border-bottom:1px dashed var(--line)}
+.vcheck .ok{color:#2F8A65}.vcheck .no{color:#C4513F}
+.ck2{background:#F7F4FC;border-radius:14px;padding:12px 14px;margin-top:12px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.ck2 input[type=checkbox]{width:18px;height:18px;accent-color:var(--purple)}
+.ck2 .in{flex:1;min-width:240px}
+@font-face{font-family:'BlackHan';src:url('/fonts/BlackHanSans-Regular.ttf')}
+
 /* ── modal & log ── */
 .modal{position:fixed;inset:0;background:rgba(40,30,70,.35);display:none;align-items:center;justify-content:center;z-index:50}
 .modal.on{display:flex}
@@ -254,16 +304,22 @@ input[type=color]{width:30px;height:30px;border:0;background:none;padding:0;curs
 </head>
 <body>
 
-<nav class="nav">
+<aside class="sidenav">
   <div class="logo"><img src="/img/cat.png" alt="">타타쿠 쇼츠 공방</div>
-  <button class="tab on" data-p="home">홈</button>
-  <button class="tab" data-p="sources">클립 수첩</button>
-  <button class="tab" data-p="layout">쇼츠 구성</button>
-  <button class="tab" data-p="script">대본 편집</button>
-  <button class="tab" data-p="make">만들기</button>
+  <button class="tab on" data-p="home"><i>🏠</i>홈</button>
+  <button class="tab" data-p="sources"><i>🔗</i>클립 수첩</button>
+  <div class="grp rk"><div class="gh"><span class="gdot" style="background:var(--purple)"></span>랭킹 편집기</div>
+    <button class="tab" data-p="layout" data-m="ranking"><i>🎬</i>쇼츠 구성</button>
+    <button class="tab" data-p="script" data-m="ranking"><i>🎙️</i>대본 편집</button>
+    <button class="tab" data-p="make" data-m="ranking"><i>✨</i>만들기</button></div>
+  <div class="grp vr"><div class="gh"><span class="gdot" style="background:#E53935"></span>예능 편집기</div>
+    <button class="tab" data-p="vcut" data-m="variety"><i>✂️</i>원본 · 컷 편집</button>
+    <button class="tab" data-p="vcap" data-m="variety"><i>💬</i>대사 자막</button>
+    <button class="tab" data-p="script" data-m="variety"><i>🎙️</i>내레이션</button>
+    <button class="tab" data-p="vmake" data-m="variety"><i>✨</i>만들기</button></div>
   <div class="spacer"></div>
   <div class="status" id="status">연결 중…</div>
-</nav>
+</aside>
 
 <div class="oldsrv" id="oldsrv">⚠️ 편집기 서버가 예전 버전으로 켜져 있어요. 열려 있는 <b>검은 창을 모두 닫고</b> <b>편집기.bat</b> 을 다시 실행해 주세요.</div>
 <div class="wrap">
@@ -278,9 +334,10 @@ input[type=color]{width:30px;height:30px;border:0;background:none;padding:0;curs
     </div>
     <div>
       <span class="pill">💜 영상 5개면 충분해요</span>
-      <h1>랭킹 쇼츠,<br><b>한 화면에서</b> 끝내기</h1>
+      <h1>랭킹 · 예능 쇼츠,<br><b>한 화면에서</b> 끝내기</h1>
       <p>클립을 모으고, 위 검정 띠와 랭킹을 꾸미고,<br>타이밍 맞춘 더빙까지 순서대로 진행하세요.</p>
-      <button class="btn" onclick="go('layout')">쇼츠 구성 시작 →</button>
+      <div class="row" style="gap:10px"><button class="btn" onclick="go('layout')">랭킹 쇼츠 만들기 →</button>
+        <button class="btn" style="background:#E53935" onclick="go('vcut')">예능 쇼츠 만들기 →</button></div>
     </div>
   </div>
 
@@ -310,6 +367,92 @@ input[type=color]{width:30px;height:30px;border:0;background:none;padding:0;curs
     <button class="btn" onclick="openFolder('clips')">clips 폴더 열기</button>
   </div>
 </section>
+
+<!-- ═══ 예능: 원본 · 컷 편집 ═══ -->
+<section class="page" id="p-vcut">
+  <span class="mode-badge vr">예능 편집기 · 원본 · 컷 편집</span>
+  <div class="vgrid">
+    <div>
+      <div class="card"><h3><span class="dot" style="background:#FDE7E7">🎞️</span>원본 영상</h3>
+        <div class="row" style="gap:8px"><select class="in" id="vSrcSel" style="flex:1"></select>
+          <button class="btn sm" onclick="pickVarSource()">📂 원본 고르기</button>
+          <button class="btn sm out" onclick="openFolder('vsrc')">폴더</button></div>
+        <p class="muted" style="margin:10px 0 0;font-size:13px">방송 원본 · 클립 하나를 골라요. 다른 폴더에서 고르면 <b>예능/원본</b> 으로 복사돼요.</p></div>
+
+      <div class="card" style="margin-top:16px"><h3><span class="dot" style="background:#222;color:#fff">T</span>위 검정 띠 제목 <small class="muted" style="font-weight:500">출연자 이름을 꼭 넣어요</small></h3>
+        <label class="lb">첫째 줄</label><input class="in" id="vT1" placeholder="헐!! 진짜 때린다고">
+        <div class="swatches" id="vC1"></div>
+        <label class="lb" style="margin-top:10px">둘째 줄</label><input class="in" id="vT2" placeholder="대인배 이수근!!">
+        <div class="swatches" id="vC2"></div>
+        <label class="lb" style="margin-top:10px">출처 (아래 띠 오른쪽)</label><input class="in" id="vCredit" placeholder="출처 - JTBC 아는 형님">
+        <label class="lb" style="margin-top:10px">영상 칸 높이 <span id="vVhTxt"></span></label><input type="range" id="vVh" min="900" max="1300" step="10" style="width:100%"></div>
+
+      <div class="card" style="margin-top:16px"><h3><span class="dot" style="background:var(--mint-soft)">✂️</span>컷 편집 <span class="spacer"></span><span class="muted" style="font-weight:500;font-size:13px" id="vLen"></span></h3>
+        <div class="row" style="gap:8px;flex-wrap:wrap">
+          <label class="muted nw">작업 구간</label><input class="in tnum" id="vA" type="number" step="0.1" min="0">~<input class="in tnum" id="vB" type="number" step="0.1" min="0">초
+          <button class="btn sm out" onclick="setRange(0)">지금 위치를 시작</button><button class="btn sm out" onclick="setRange(1)">지금 위치를 끝</button></div>
+        <div class="row" style="gap:8px;margin-top:10px;flex-wrap:wrap">
+          <select class="in" id="vSens" style="width:auto"><option value="soft">덜 자르기</option><option value="normal" selected>보통</option><option value="tight">촘촘히 자르기</option></select>
+          <button class="btn" onclick="findSpeech()">빈 호흡 찾기</button>
+          <button class="btn out" onclick="addSegHere()">＋ 지금 위치에 구간 추가</button></div>
+        <p class="muted" style="font-size:12.5px;margin:10px 0 0;line-height:1.7">말소리가 끊기는 곳을 찾아 구간으로 나눠요. 재미없는 대사 구간은 <b>남김</b>을 끄고, 제일 센 장면은 <b>후킹</b>을 켜면 맨 앞에 한 번 더 나와요.</p>
+        <div class="tline" id="vTline"></div>
+        <div class="tleg"><span><i style="background:#7CDBA8"></i>남김</span><span><i style="background:#E4E0EC"></i>버림</span><span><i style="background:#FFB300"></i>후킹</span></div>
+        <div id="vSegs"></div></div>
+    </div>
+    <div class="sticky" id="vSticky1"></div>
+  </div>
+</section>
+
+<!-- ═══ 예능: 대사 자막 ═══ -->
+<section class="page" id="p-vcap">
+  <span class="mode-badge vr">예능 편집기 · 대사 자막</span>
+  <div class="vgrid">
+    <div>
+      <div class="card"><h3><span class="dot" style="background:var(--sky-soft)">💬</span>대사 자막 <small class="muted" style="font-weight:500">흰 글씨 · 한 줄씩</small></h3>
+        <p class="muted" style="font-size:13px;margin:0 0 12px;line-height:1.7">오른쪽 미리보기를 재생하다가 대사가 나오는 순간 <b>＋ 지금 위치에 자막</b>을 누르고 글을 써요.
+          느낌표 · 물결로 캐릭터를 살려 주세요. 후킹 구간에 들어가는 자막은 <b style="color:#E53935">빨간 글씨 + 흔들림</b>으로 자동으로 바뀌어요.
+          내레이션 자막(형광 노랑)은 내레이션 탭에서 자동으로 만들어져요.</p>
+        <div class="row" style="gap:8px"><button class="btn" onclick="addCapHere()">＋ 지금 위치에 자막</button><span class="muted" id="vCapNow"></span></div>
+        <div id="vCaps" style="margin-top:12px"></div></div>
+    </div>
+    <div class="sticky" id="vSticky2"></div>
+  </div>
+</section>
+
+<!-- ═══ 예능: 만들기 ═══ -->
+<section class="page" id="p-vmake">
+  <span class="mode-badge vr">예능 편집기 · 만들기</span>
+  <div class="card"><h3><span class="dot" style="background:var(--mint-soft)">✅</span>올리기 전 점검 <small class="muted" style="font-weight:500">공정 이용 · 조회수</small></h3>
+    <div id="vCheck" class="vcheck"></div>
+    <div class="ck2"><label><input type="checkbox" id="vRightsOk"> <b>권리를 확인했어요</b></label>
+      <input class="in" id="vRights" placeholder="예: 화이트리스트 작품 / 제작사 허락 받음 / 직접 촬영"></div></div>
+  <div class="card fin" style="margin-top:16px">
+    <div><h3 style="margin:0 0 4px">🎬 한 번에 완성하기</h3>
+      <p class="muted" style="margin:0" id="vFinInfo">바뀐 줄만 내레이션을 새로 만들고 → 컷 이어붙이기 · 띠 · 자막 → 내레이션 합성까지 해요.</p></div>
+    <span class="spacer"></span><button class="btn big" id="vbFinish" onclick="finish()">한 번에 완성하기</button></div>
+  <div class="card up" id="vupCard" style="margin-top:16px"></div>
+  <div class="row" style="margin-top:22px"><h3 style="margin:0">완성 파일</h3><div class="spacer"></div><button class="btn sm out" onclick="openFolder('vout')">output 폴더 열기</button></div>
+  <div class="outs" id="vouts"></div>
+  <div class="card next" style="margin-top:26px">
+    <div><h3 style="margin:0 0 6px">🐾 업로드 끝! 다음 예능 쇼츠 시작하기</h3>
+      <p class="muted" style="margin:0;line-height:1.7">편집 · 내레이션 · 음성 · 완성 영상 · 원본을 <b>보관함</b>으로 옮기고 새로 시작해요. 띠 색 · 영상 칸 높이는 그대로 남아요.</p></div>
+    <span class="spacer"></span><button class="btn big" onclick="resetAll()">✨ 새 예능 쇼츠 시작하기</button></div>
+</section>
+
+<!-- 예능 미리보기 (페이지를 옮겨 다님) -->
+<div id="vPreviewHost" style="display:none"><div id="vPreview">
+  <div class="vphone" id="vPhone">
+    <div class="vtop" id="vTop"><div id="vT1v"></div><div id="vT2v"></div></div>
+    <div class="vvid" id="vVidBox"><video id="vVid" muted playsinline preload="metadata"></video><div class="vcap" id="vCapV"></div></div>
+    <div class="vbot" id="vBot"><div class="vnarr" id="vNarrV"></div><div class="vcred" id="vCredV"></div></div>
+  </div>
+  <div class="row" style="justify-content:center;gap:8px;margin-top:10px">
+    <button class="btn sm" id="vPlayAll" onclick="playAll()">▶ 전체 미리보기</button><button class="btn sm out" onclick="vStop()">⏸ 멈춤</button>
+    <label class="btn sm out" style="cursor:pointer"><input type="checkbox" id="vSound" style="margin:0 4px 0 0">소리</label></div>
+  <div class="muted" style="text-align:center;font-size:12.5px;margin-top:6px" id="vNow">원본 0:00.0</div>
+  <input type="range" id="vScrub" min="0" max="100" step="0.1" value="0" style="width:100%;margin-top:6px">
+</div></div>
 
 <!-- ═══ 클립 수첩 ═══ -->
 <section class="page" id="p-sources">
@@ -407,11 +550,12 @@ input[type=color]{width:30px;height:30px;border:0;background:none;padding:0;curs
 
 <!-- ═══ 대본 편집 ═══ -->
 <section class="page" id="p-script">
+  <span class="mode-badge rk" id="scriptMode">랭킹 편집기 · 대본 편집</span>
   <div class="voices">
     <div class="card vcard"><span class="dot" style="background:var(--purple-soft)">🎙️</span>
-      <div style="flex:1"><div class="muted">내레이터 · <small>기본 감정을 눌러 고르세요</small></div><div class="nm" id="vnNarr">-</div><div class="emos narr" id="veNarr"></div></div>
-      <button class="btn ghost" onclick="openVoice('narr')">고르기</button></div>
-    <div class="card vcard"><span class="dot" style="background:var(--coral-soft)">🐱</span>
+      <div style="flex:1"><div class="muted"><span id="narrLabel">내레이터</span> · <small>기본 감정을 눌러 고르세요</small></div><div class="nm" id="vnNarr">-</div><div class="emos narr" id="veNarr"></div></div>
+      <button class="btn ghost" onclick="openVoice(ROLES()[0])">고르기</button></div>
+    <div class="card vcard" id="catCard"><span class="dot" style="background:var(--coral-soft)">🐱</span>
       <div style="flex:1"><div class="muted">캐릭터 · <small>기본 감정을 눌러 고르세요</small></div><div class="nm" id="vnCat">-</div><div class="emos cat" id="veCat"></div></div>
       <button class="btn ghost" onclick="openVoice('cat')">고르기</button></div>
   </div>
@@ -500,22 +644,28 @@ input[type=color]{width:30px;height:30px;border:0;background:none;padding:0;curs
 <script>
 const PALETTE=['#FFFFFF','#FFE14D','#D9A6FF','#7FD3FF','#FF8FB1','#7CF2A6'];
 const S=360/1080;
-let ST=null, LAY=null, LINES=[], pvRank=null, vRole=null, saveT=null, clipDur={};
+let ST=null, LAY=null, LINES=[], pvRank=null, vRole=null, saveT=null, clipDur={}, MODE='ranking', ED=null, edT=null;
+const ROLES=()=>MODE==='variety'?['vnarr']:['narr','cat'];
 const $=id=>document.getElementById(id);
 
 function toast(m){const t=$('toast');t.textContent=m;t.style.display='block';clearTimeout(t._h);t._h=setTimeout(()=>t.style.display='none',2600)}
 async function get(u){const r=await fetch(u);return r.json()}
 async function post(u,b={}){const r=await fetch(u,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)});return r.json()}
-function go(p){if(p==='script')setTimeout(()=>document.querySelectorAll('.ln textarea').forEach(t=>t.dispatchEvent(new Event('fit'))),30);
-  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on',t.dataset.p===p));
-  document.querySelectorAll('.page').forEach(s=>s.classList.toggle('on',s.id==='p-'+p));window.scrollTo(0,0)}
-document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>go(t.dataset.p));
+async function go(p,m){
+  if(!m){m={layout:'ranking',make:'ranking',vcut:'variety',vcap:'variety',vmake:'variety'}[p]||MODE}
+  const switched=m!==MODE;MODE=m;
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on',t.dataset.p===p&&(!t.dataset.m||t.dataset.m===MODE)));
+  document.querySelectorAll('.page').forEach(s=>s.classList.toggle('on',s.id==='p-'+p));window.scrollTo(0,0);
+  if(p==='vcut'||p==='vcap'){const host=$(p==='vcut'?'vSticky1':'vSticky2');host.appendChild($('vPreview'))}
+  if(switched){SEL=-1;myStamp=0;await refresh(true)}
+  if(p==='script')setTimeout(()=>document.querySelectorAll('.ln textarea').forEach(t=>t.dispatchEvent(new Event('fit'))),30)}
+document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>go(t.dataset.p,t.dataset.m));
 function openFolder(n){post('/api/open-folder',{name:n}).then(r=>toast(r.path?'폴더를 열었어요':'열 수 없어요'))}
 function esc(s){return String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
 
 /* ── 상태 ── */
 async function refresh(full){
-  ST=await get('/api/state');
+  ST=await get('/api/state?mode='+MODE);
   const s=$('status');
   if(ST.connected){s.className='status ok';s.textContent='연결됨 · 크레딧 '+(ST.credits??0).toLocaleString()}
   else if(ST.error){s.className='status bad';s.textContent='연결 안 됨'}
@@ -523,8 +673,9 @@ async function refresh(full){
   $('log').innerHTML=(ST.busy?'<b>⏳ '+esc(ST.busy)+'…</b><br>':'')+ST.log.map(esc).join('<br>');
   $('log').scrollTop=1e6;
   $('oldsrv').style.display=ST.version?'none':'block';
-  if(full){LAY=ST.layout;LINES=ST.script;creditSig=''}
-  [renderVoices,renderOutputs,renderSources,renderCredits,renderRefs,fillSources,renderUpload].forEach(fn=>{try{fn()}catch(e){console.error(fn.name,e)}});
+  if(full){LAY=ST.layout;LINES=ST.script;creditSig='';ED=ST.edit}
+  if(!ED)ED=ST.edit;
+  [renderVoices,renderOutputs,renderSources,renderCredits,renderRefs,fillSources,renderUpload,renderVariety].forEach(fn=>{try{fn()}catch(e){console.error(fn.name,e)}});
   $('ffInfo').style.display=ST.ffmpeg?'none':'flex';
   $('bRender').disabled=!ST.ffmpeg||!!ST.busy;$('bMux').disabled=!ST.ffmpeg||!!ST.busy;
   if(full){try{fillLayout()}catch(e){console.error('fillLayout',e)}try{renderLines()}catch(e){console.error('renderLines',e)}}
@@ -739,40 +890,49 @@ document.addEventListener('paste',e=>{if(!$('p-layout').classList.contains('on')
 const EMO_KO={normal:'일반',happy:'기쁨',sad:'슬픔',angry:'화남',toneup:'높은 톤',tonedown:'낮은 톤',whisper:'속삭임'};
 const ek=e=>EMO_KO[e]||e;
 const emoOrder=list=>Object.keys(EMO_KO).filter(e=>list.includes(e)).concat(list.filter(e=>!EMO_KO[e]));
-function defEmo(role){return (LAY&&LAY.voiceEmo&&LAY.voiceEmo[role])||'normal'}
-function setDefEmo(role,e){if(!LAY)return;LAY.voiceEmo=Object.assign({},LAY.voiceEmo,{[role]:e});changed();renderVoices();
+const MOBJ=()=>MODE==='variety'?ED:LAY;
+function mchanged(){MODE==='variety'?saveEdit():changed()}
+function defEmo(role){const o=MOBJ();return (o&&o.voiceEmo&&o.voiceEmo[role])||'normal'}
+function setDefEmo(role,e){const o=MOBJ();if(!o)return;o.voiceEmo=Object.assign({},o.voiceEmo,{[role]:e});mchanged();renderVoices();
   toast(`${role==='cat'?'캐릭터':'내레이터'} 기본 감정: ${ek(e)} — 새 줄과 다음 대본에 써요`)}
-function copyAsk(){const m=($('brief').value||'').trim();const t='쇼츠 구성이랑 목소리 골랐어. 대본 만들어줘'+(m?`\n메모: ${m}`:'');
+function copyAsk(){const m=($('brief').value||'').trim();const t=(MODE==='variety'?'예능 컷 편집이랑 목소리 골랐어. 예능 대본 만들어줘':'쇼츠 구성이랑 목소리 골랐어. 대본 만들어줘')+(m?`\n메모: ${m}`:'');
   navigator.clipboard.writeText(t).then(()=>toast('복사했어요. Claude 채팅창에 붙여넣어 보내 주세요'))}
 let SEL=-1, myStamp=0;
 function renderVoices(){if(!ST)return;
-  const n=ST.voices.narr,c=ST.voices.cat;
+  const R=ROLES(),n=ST.voices[R[0]]||{emotions:[]},c=ST.voices.cat||{emotions:[]};
+  $('scriptMode').className='mode-badge '+(MODE==='variety'?'vr':'rk');$('scriptMode').textContent=MODE==='variety'?'예능 편집기 · 내레이션':'랭킹 편집기 · 대본 편집';
+  $('narrLabel').textContent=MODE==='variety'?'예능 내레이터':'내레이터';$('catCard').style.display=MODE==='variety'?'none':'';
   $('vnNarr').textContent=n.name||'아직 안 골랐어요';$('vnCat').textContent=c.name||'아직 안 골랐어요';
-  [['veNarr','narr',n],['veCat','cat',c]].forEach(([id,role,v])=>{const box=$(id);const cur=defEmo(role);const sig=v.emotions.join()+cur;if(box.dataset.k===sig)return;box.dataset.k=sig;
+  [['veNarr',R[0],n],['veCat','cat',c]].forEach(([id,role,v])=>{const box=$(id);const cur=defEmo(role);const sig=v.emotions.join()+cur;if(box.dataset.k===sig)return;box.dataset.k=sig;
     box.innerHTML=emoOrder(v.emotions).map(e=>`<button class="echip ${e===cur?'on':''}" data-e="${e}">${ek(e)}</button>`).join('');
     box.querySelectorAll('[data-e]').forEach(b=>b.onclick=()=>setDefEmo(role,b.dataset.e))});
   const done=LINES.filter(l=>l.fresh).length;
   $('voiceCount').textContent=`대사 ${LINES.length}줄 중 ${done}줄 음성 완료`;
-  $('finInfo').textContent=LINES.length?`대사 ${LINES.length}줄 · 음성 ${done}줄 준비됨 — 바뀐 줄만 새로 만들고 구성 영상 → 더빙 합성까지 해요.`:'Claude 에게 “대본 만들어줘”라고 하면 대사가 채워져요.';
-  $('bFinish').disabled=!!ST.busy||!LINES.length;$('bFinish').textContent=ST.busy?('⏳ '+ST.busy):'한 번에 완성하기';
-  const fv=$('finV'),has=ST.outputs.includes('완성본.mp4');fv.style.display=has?'flex':'none';
-  const mt=(ST.outTimes||{})['완성본.mp4']||0;if(has&&!ST.busy&&fv.dataset.k!==String(mt)){fv.dataset.k=String(mt);fv.innerHTML=`<video controls preload="metadata" src="/out/${encodeURIComponent('완성본.mp4')}?t=${mt}"></video>`}
+  const VR=MODE==='variety',ask=VR?'예능 대본 만들어줘':'대본 만들어줘';
+  $('finInfo').textContent=LINES.length?`${VR?'내레이션':'대사'} ${LINES.length}줄 · 음성 ${done}줄 준비됨 — 바뀐 줄만 새로 만들고 ${VR?'컷 이어붙이기 → 내레이션 합성':'구성 영상 → 더빙 합성'}까지 해요.`:`Claude 에게 “${ask}”라고 하면 ${VR?'내레이션이':'대사가'} 채워져요.`;
+  $('bFinish').disabled=!!ST.busy||(!LINES.length&&!VR);$('bFinish').textContent=ST.busy?('⏳ '+ST.busy):'한 번에 완성하기';
+  if($('vbFinish')){$('vbFinish').disabled=!!ST.busy;$('vbFinish').textContent=ST.busy?('⏳ '+ST.busy):'한 번에 완성하기'}
+  document.querySelectorAll('#p-script .say').forEach(x=>x.textContent=`“${ask}”`);
+  document.querySelectorAll('#p-script .steps4>div')[0].innerHTML=VR?'<b>1</b>원본 · 컷 편집에서 구간 정하기':'<b>1</b>쇼츠 구성에서 클립 5개 고르기';
+  document.querySelectorAll('#p-script .steps4>div')[1].innerHTML=VR?'<b>2</b>위에서 예능 내레이터 목소리 고르기':'<b>2</b>위에서 내레이터 · 캐릭터 목소리 고르기';
+  const FN=ST.final||'완성본.mp4',fv=$('finV'),has=ST.outputs.includes(FN);fv.style.display=has?'flex':'none';
+  const mt=(ST.outTimes||{})[FN]||0,fk=FN+mt;if(has&&!ST.busy&&fv.dataset.k!==fk){fv.dataset.k=fk;fv.innerHTML=`<video controls preload="metadata" src="/out/${encodeURIComponent(FN)}?t=${mt}"></video>`}
   // Claude 가 대본을 새로 넣었거나 음성이 만들어지면 다시 읽기
   if(ST.scriptStamp&&ST.scriptStamp!==myStamp&&!($('lines').contains(document.activeElement))){
     const first=!myStamp;myStamp=ST.scriptStamp;const was=LINES.length;LINES=ST.script;renderLines();
     if(!first&&!was&&LINES.length)toast('새 대본이 들어왔어요 ✨')}
-  if(LAY&&document.activeElement!==$('brief'))$('brief').value=LAY.brief||'';
+  if(MOBJ()&&document.activeElement!==$('brief'))$('brief').value=MOBJ().brief||'';
 }
-$('brief').oninput=()=>{if(!LAY)return;LAY.brief=$('brief').value;changed()};
-function emoList(role){return (ST&&ST.voices[role].emotions.length)?ST.voices[role].emotions:['normal']}
+$('brief').oninput=()=>{const o=MOBJ();if(!o)return;o.brief=$('brief').value;mchanged()};
+function emoList(role){return (ST&&ST.voices[role]&&ST.voices[role].emotions.length)?ST.voices[role].emotions:['normal']}
 function clipOpts(sel){const ct=(ST&&ST.clipTimes)||[];
-  return `<option value="">클립 고르기</option>`+ct.map(c=>`<option value="${c.rank}" ${+sel===c.rank?'selected':''}>${c.rank}위${c.label?' '+esc(c.label):''}</option>`).join('')}
-function absStart(l){const c=((ST&&ST.clipTimes)||[]).find(c=>c.rank===+l.clip);return c?c.start+(+l.at||0):(l.start??null)}
+  return `<option value="">${MODE==='variety'?'구간 고르기':'클립 고르기'}</option>`+ct.map(c=>`<option value="${c.rank}" ${String(sel)===String(c.rank)?'selected':''}>${MODE==='variety'?esc(c.label):c.rank+'위'+(c.label?' '+esc(c.label):'')}</option>`).join('')}
+function absStart(l){const c=((ST&&ST.clipTimes)||[]).find(c=>String(c.rank)===String(l.clip));return c?c.start+(+l.at||0):(l.start??null)}
 function resOf(l){if(!l.file)return ['none','아직 안 만듦'];if(!l.fresh)return ['over','바뀜 · 다시 만들기'];
   return l.fit===false?['over',`⚠️ ${(+l.duration).toFixed(1)}초 · 칸보다 길어요`]:['ok',`✅ ${(+l.duration).toFixed(1)}초`]}
 function renderLines(){
   const box=$('lines');box.innerHTML='';
-  if(!LINES.length){box.innerHTML=`<div class="empty-ln">아직 대본이 없어요.<br>쇼츠 구성과 목소리를 고른 뒤 Claude 에게 <b>“대본 만들어줘”</b> 라고 말해 주세요.<br>직접 쓰고 싶으면 아래 <b>＋ 줄 추가</b>를 눌러요.</div>`}
+  if(!LINES.length){box.innerHTML=MODE==='variety'?`<div class="empty-ln">아직 내레이션이 없어요.<br>컷 편집과 목소리를 고른 뒤 Claude 에게 <b>“예능 대본 만들어줘”</b> 라고 말해 주세요.<br>그냥 상황 설명 말고, 해석 · 드립이 들어간 짧은 문장으로 채워 드려요.</div>`:`<div class="empty-ln">아직 대본이 없어요.<br>쇼츠 구성과 목소리를 고른 뒤 Claude 에게 <b>“대본 만들어줘”</b> 라고 말해 주세요.<br>직접 쓰고 싶으면 아래 <b>＋ 줄 추가</b>를 눌러요.</div>`}
   LINES.forEach((l,i)=>{
     const d=document.createElement('div');d.className='ln'+(i===SEL?' sel':'');
     const v=ST.voices[l.speaker]||{},len=[...(l.text||'').replace(/\s/g,'')].length,[rc,rt]=resOf(l),ab=absStart(l);
@@ -785,9 +945,9 @@ function renderLines(){
     box.appendChild(d);
     const ta=d.querySelector('textarea');const fit=()=>{if(!ta.offsetParent)return;ta.style.height='auto';ta.style.height=Math.max(34,ta.scrollHeight)+'px'};setTimeout(fit,0);ta.addEventListener('fit',fit);
     d.onclick=e=>{if(SEL!==i){SEL=i;box.querySelectorAll('.ln').forEach((x,k)=>x.classList.toggle('sel',k===i));syncBar()}};
-    d.querySelector('.spk').onclick=()=>{l.speaker=l.speaker==='cat'?'narr':'cat';if(!emoList(l.speaker).includes(l.emotion))l.emotion='normal';touch(i,true)};
+    d.querySelector('.spk').onclick=()=>{if(MODE==='variety')return;l.speaker=l.speaker==='cat'?'narr':'cat';if(!emoList(l.speaker).includes(l.emotion))l.emotion='normal';touch(i,true)};
     d.querySelectorAll('[data-k]').forEach(inp=>inp.oninput=()=>{const k=inp.dataset.k;
-      l[k]=k==='text'?inp.value:(k==='clip'?(inp.value?+inp.value:null):+inp.value);if(k==='text')fit();touch(i,k==='clip')});
+      l[k]=k==='text'?inp.value:(k==='clip'?(inp.value===''?null:(isNaN(+inp.value)?inp.value:+inp.value)):+inp.value);if(k==='text')fit();touch(i,k==='clip')});
     d.querySelector('[data-play]').onclick=e=>{e.stopPropagation();playLine(i)};
     d.querySelector('[data-del]').onclick=e=>{e.stopPropagation();LINES.splice(i,1);if(SEL>=LINES.length)SEL=LINES.length-1;renderLines();saveScript()};
   });
@@ -824,26 +984,27 @@ $('tGen').onclick=()=>gen(SEL);
 function playLine(i){const l=LINES[i];if(!l)return;if(!l.file||!l.fresh)return gen(i).then(ok=>ok&&playLine(i));
   new Audio('/voice/'+encodeURIComponent(l.file)+'?t='+Date.now()).play()}
 async function saveScript(now){clearTimeout(saveScript.t);
-  const go_=async()=>{const r=await post('/api/script',{lines:LINES});if(r.stamp)myStamp=r.stamp};
+  const go_=async()=>{const r=await post('/api/script',{lines:LINES,mode:MODE});if(r.stamp)myStamp=r.stamp};
   if(now)return go_();saveScript.t=setTimeout(go_,400)}
 function addLine(){const l=LINES[SEL]||LINES[LINES.length-1];const ct=(ST&&ST.clipTimes)||[];
-  LINES.splice(SEL>=0?SEL+1:LINES.length,0,{speaker:l?l.speaker:'narr',clip:l?l.clip:(ct[0]||{}).rank,at:l?+((+l.at||0)+(+l.slot||1)+0.2).toFixed(1):0.2,slot:1.5,emotion:defEmo(l?l.speaker:'narr'),intensity:1,speed:1,pitch:0,text:''});
+  LINES.splice(SEL>=0?SEL+1:LINES.length,0,{speaker:l?l.speaker:ROLES()[0],clip:l?l.clip:(ct[0]||{}).rank,at:l?+((+l.at||0)+(+l.slot||1)+0.2).toFixed(1):0.2,slot:1.5,emotion:defEmo(l?l.speaker:ROLES()[0]),intensity:1,speed:1,pitch:0,text:''});
   SEL=SEL>=0?SEL+1:LINES.length-1;renderLines();saveScript();setTimeout(()=>document.querySelectorAll('.ln textarea')[SEL]?.focus(),50)}
-function updateLenInfo(){if(!LAY)return;const t=totalLen();
+function updateLenInfo(){if(MODE==='variety'){const t=ST?ST.editLength:0;$('lenInfo').innerHTML=t?`예능 영상 전체 길이 <b>${t.toFixed(1)}초</b>${t>60?' <b style="color:#C4513F">(1분 넘어요)</b>':''}. 내레이션은 <b>몇 번째 구간의 몇 초부터, 몇 초 안에</b>로 정해요. 나오는 동안 원본 소리는 꺼져요.`:'원본 · 컷 편집에서 구간을 정하면 길이가 여기에 보여요.';return}
+  if(!LAY)return;const t=totalLen();
   $('lenInfo').innerHTML=t?`구성 영상 전체 길이 <b>${t.toFixed(1)}초</b>. 대사는 <b>몇 위 클립의 몇 초부터, 몇 초 안에</b>로 정해서 클립 순서나 길이를 바꿔도 따라가요.`:'쇼츠 구성에서 클립을 고르면 전체 길이가 여기에 보여요.'}
 function checkTimeline(){const s=LINES.map((l,i)=>({s:absStart(l),e:absStart(l)+(+l.slot||l.duration||0),i,sp:l.speaker})).filter(x=>x.s!=null).sort((a,b)=>a.s-b.s);const m=[];
   for(let k=0;k+1<s.length;k++)if(s[k].e>s[k+1].s+0.01)m.push(`${s[k].i+1}번과 ${s[k+1].i+1}번이 겹쳐요`);
-  const t=totalLen();s.forEach(x=>{if(t&&x.e>t+0.01)m.push(`${x.i+1}번이 영상 끝(${t.toFixed(1)}초)을 넘어요`)});
+  const t=MODE==='variety'?(ST.editLength||0):totalLen();s.forEach(x=>{if(t&&x.e>t+0.01)m.push(`${x.i+1}번이 영상 끝(${t.toFixed(1)}초)을 넘어요`)});
   LINES.forEach((l,i)=>{if(!l.clip)m.push(`${i+1}번은 클립을 안 골랐어요`)});
   toast(m.length?m.slice(0,4).join(' · '):'겹치는 곳 없어요 ✓')}
 async function gen(i){if(i<0||!LINES[i])return false;await saveScript(true);
   const r=document.querySelectorAll('.ln')[i]?.querySelector('[data-r]');if(r){r.className='res run';r.textContent='만드는 중…'}
-  const res=await post('/api/generate',{index:i});
+  const res=await post('/api/generate',{index:i,mode:MODE});
   if(res.error){if(r){r.className='res err';r.textContent='실패'}toast(res.error);return false}
   Object.assign(LINES[i],{duration:res.duration,emotion:res.emotion||LINES[i].emotion,file:res.file,fit:res.fit,fresh:true});
   if(r){const[rc,rt]=resOf(LINES[i]);r.className='res '+rc;r.textContent=rt}
   if(res.swapped)toast(`${i+1}번 감정을 ${ek(res.emotion)}(으)로 바꿨어요`);renderVoices();return true}
-async function finish(){await saveScript(true);const r=await post('/api/finish',{});if(r.error)return toast(r.error);toast('완성 작업을 시작했어요. 조금만 기다려 주세요');refresh()}
+async function finish(){await saveScript(true);const r=await post('/api/finish',{mode:MODE});if(r.error)return toast(r.error);toast('완성 작업을 시작했어요. 조금만 기다려 주세요');refresh()}
 
 /* ── 목소리 ── */
 const VCATS=['숏폼·쇼츠','아이·학생','캐릭터·게임','일상 대화','광고·홈쇼핑','다큐·나레이션','아나운서·뉴스'];
@@ -868,16 +1029,16 @@ async function recommendVoice(){$('vlist').innerHTML='<p class="muted">추천 �
 
 /* ── 업로드 준비 ── */
 function cp(t,msg){navigator.clipboard.writeText(t).then(()=>toast(msg||'복사했어요'))}
-function descText(){const u=ST.upload||{};return [u.intro||'',$('credits').value,u.hashtags||''].filter(Boolean).join('\n\n')}
-function renderUpload(){const box=$('upCard');if(!ST)return;const u=ST.upload;
-  const sig=JSON.stringify(u)+JSON.stringify(ST.outTimes||{});if(box.dataset.k===sig){const d=$('upDesc');if(d&&document.activeElement!==d)d.value=descText();return}box.dataset.k=sig;
+function descText(){const u=ST.upload||{};const cr=MODE==='variety'?(ED&&ED.credit?`📌 영상 출처\n${ED.credit}`:''):$('credits').value;return [u.intro||'',cr,u.hashtags||''].filter(Boolean).join('\n\n')}
+function renderUpload(){if(!ST)return;const box=$(MODE==='variety'?'vupCard':'upCard'),other=$(MODE==='variety'?'upCard':'vupCard');other.dataset.k='';other.innerHTML='';const u=ST.upload;
+  const sig=MODE+JSON.stringify(u)+JSON.stringify(ST.outTimes||{});if(box.dataset.k===sig){const d=$('upDesc');if(d&&document.activeElement!==d)d.value=descText();return}box.dataset.k=sig;
   if(!u){box.innerHTML=`<h3>📤 업로드 준비</h3><div class="empty">제목 3개 · 썸네일 3개 · 설명란 · 태그 · 고정 댓글을 Claude 가 영상을 보고 만들어 드려요.<br>
-    Claude 채팅창에 <b>“업로드 준비해줘”</b> 라고 보내 주세요. <button class="btn sm" onclick="cp('완성본 나왔어. 업로드 준비해줘 (제목, 썸네일, 설명, 태그, 고정 댓글)','복사했어요. Claude 채팅창에 붙여넣어 주세요')">📋 요청 문구 복사</button></div>`;return}
+    Claude 채팅창에 <b>“업로드 준비해줘”</b> 라고 보내 주세요. <button class="btn sm" onclick="cp((MODE==='variety'?'예능 완성본 나왔어. ':'완성본 나왔어. ')+'업로드 준비해줘 (제목, 썸네일, 설명, 태그, 고정 댓글)','복사했어요. Claude 채팅창에 붙여넣어 주세요')">📋 요청 문구 복사</button></div>`;return}
   const T=ST.outTimes||{};
   box.innerHTML=`<h3>📤 업로드 준비 <small class="muted" style="font-weight:500">Claude 가 영상을 보고 만들었어요 · 눌러서 복사</small></h3>
     <div class="sec"><b>제목 추천</b>${(u.titles||[]).map((t,i)=>`<div class="tt"><span>${i+1}. ${esc(t)}</span><button class="btn sm" data-t="${i}">복사</button></div>`).join('')}</div>
     <div class="sec"><b>썸네일 추천</b><div class="ths">${(u.thumbs||[]).map(t=>`<div class="th">${T[t.file]?`<img src="/out/${encodeURIComponent(t.file)}?t=${T[t.file]}" alt="">`:''}<b>${esc(t.title||'')}</b><br>${esc(t.idea||'')}${t.frame?`<br><span class="muted">앱에서 장면으로 고를 땐: ${esc(t.frame)}</span>`:''}</div>`).join('')}</div>
-      <div class="row" style="margin-top:8px"><span class="muted">썸네일 사진은 output 폴더에 있어요.</span><span class="spacer"></span><button class="btn sm out" onclick="openFolder('output')">output 폴더 열기</button></div></div>
+      <div class="row" style="margin-top:8px"><span class="muted">썸네일 사진은 output 폴더에 있어요.</span><span class="spacer"></span><button class="btn sm out" onclick="openFolder(MODE==='variety'?'vout':'output')">output 폴더 열기</button></div></div>
     <div class="sec"><b>설명란 (소개 + 출처 + 해시태그)</b><textarea class="in" id="upDesc" rows="11"></textarea>
       <div class="row" style="margin-top:6px"><span class="spacer"></span><button class="btn sm" onclick="cp($('upDesc').value,'설명란을 복사했어요')">설명란 복사</button></div></div>
     <div class="sec"><b>태그 <small class="muted">(유튜브 스튜디오 ‘태그’ 칸)</small></b><div class="tt"><span>${esc(u.tags||'')}</span><button class="btn sm" onclick="cp(ST.upload.tags,'태그를 복사했어요')">복사</button></div></div>
@@ -886,12 +1047,141 @@ function renderUpload(){const box=$('upCard');if(!ST)return;const u=ST.upload;
   $('upDesc').value=descText();
   box.querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>cp(u.titles[+b.dataset.t],'제목을 복사했어요'))}
 async function resetAll(){if(ST&&ST.busy)return toast('작업이 끝난 뒤에 눌러 주세요');
-  if(!confirm('지금 작업을 보관함으로 옮기고 새 쇼츠를 시작할까요?\n(지우지 않고 보관함 폴더로 옮겨요)'))return;
-  clearTimeout(saveT);clearTimeout(saveScript.t);  const r=await post('/api/reset',{});if(r.error)return toast(r.error);
-  SEL=-1;myStamp=0;await refresh(true);go('sources');toast(`보관함/${r.archive} 로 옮겼어요. 새 링크를 모아 볼까요?`)}
+  if(!confirm(`지금 ${MODE==='variety'?'예능':'랭킹'} 작업을 보관함으로 옮기고 새로 시작할까요?\n(지우지 않고 보관함 폴더로 옮겨요)`))return;
+  clearTimeout(saveT);clearTimeout(saveScript.t);  const r=await post('/api/reset',{mode:MODE});if(r.error)return toast(r.error);
+  SEL=-1;myStamp=0;ED=null;await refresh(true);if(MODE==='variety'){go('vcut');toast(`보관함/${r.archive} 로 옮겼어요. 새 원본을 골라 볼까요?`)}else{go('sources');toast(`보관함/${r.archive} 로 옮겼어요. 새 링크를 모아 볼까요?`)}}
+
+/* ── 예능 편집기 ── */
+const VPAL=['#FFE14D','#4FE3FF','#FFFFFF','#FF5A5A','#7CF2A6','#D9A6FF'];
+const VS=360/1080;let vSel=null,vPlay=null,vDur=0,vNat={w:1920,h:1080},vLoaded='';
+const r1=x=>Math.round(x*10)/10;
+function fmtT(x){x=Math.max(0,+x||0);return Math.floor(x/60)+':'+(x%60).toFixed(1).padStart(4,'0')}
+function saveEdit(){clearTimeout(edT);edT=setTimeout(async()=>{const r=await post('/api/variety/edit',{edit:ED});
+  if(r.length!=null&&ST){ST.editLength=r.length;vLenTxt()}},350)}
+function vLenTxt(){const t=vTotal();$('vLen').textContent=t?`완성 길이 ${t.toFixed(1)}초${t>60?' · 1분 넘어요':''}`:''}
+function vSegs(){return (ED.segments||[]).slice().sort((a,b)=>a.start-b.start)}
+function vPieces(){const ss=vSegs().filter(s=>s.end>s.start);let t=0;
+  return ss.filter(s=>s.hook).map(s=>[s,true]).concat(ss.filter(s=>s.keep!==false).map(s=>[s,false])).map(([s,h])=>{const d=s.end-s.start;const o={seg:s,start:s.start,end:s.end,out:t,hook:h};t+=d;return o})}
+function vTotal(){const p=vPieces();return p.length?p[p.length-1].out+(p[p.length-1].end-p[p.length-1].start):0}
+function vSegAt(t){return vSegs().find(s=>t>=s.start&&t<s.end)}
+
+function renderVariety(){if(!ST||!ED)return;
+  if(renderVariety._ed!==ED){renderVariety._ed=ED;fillVariety()}
+  const sel=$('vSrcSel'),sig=(ST.varSources||[]).join('|')+'#'+ED.source;
+  if(sel.dataset.k!==sig){sel.dataset.k=sig;sel.innerHTML=`<option value="">— 원본 고르기 —</option>`+(ST.varSources||[]).map(f=>`<option ${f===ED.source?'selected':''}>${esc(f)}</option>`).join('')}
+  if(ED.source&&vLoaded!==ED.source){vLoaded=ED.source;$('vVid').src='/src/'+encodeURIComponent(ED.source)}
+  if(!ED.source&&vLoaded){vLoaded='';$('vVid').removeAttribute('src');$('vVid').load()}
+  renderCheck()}
+function fillVariety(){
+  $('vT1').value=ED.title1||'';$('vT2').value=ED.title2||'';$('vCredit').value=ED.credit||'';
+  $('vVh').value=ED.videoH;$('vVhTxt').textContent=`(${ED.videoH}px)`;
+  $('vA').value=r1(ED.range[0]||0);$('vB').value=r1(ED.range[1]||0);
+  $('vRightsOk').checked=!!ED.rightsOk;$('vRights').value=ED.rights||'';
+  [['vC1','title1Color'],['vC2','title2Color']].forEach(([id,k])=>{$(id).innerHTML=VPAL.map(c=>`<button class="sw ${c===ED[k]?'on':''}" style="background:${c}" data-c="${c}"></button>`).join('');
+    $(id).querySelectorAll('[data-c]').forEach(b=>b.onclick=()=>{ED[k]=b.dataset.c;fillVariety();vBand();saveEdit()})});
+  renderSegs();renderCaps();vBand();vLenTxt()}
+$('vSrcSel').onchange=e=>{const f=e.target.value;if(f===ED.source)return;
+  if((ED.segments.length||ED.captions.length)&&!confirm('원본을 바꾸면 지금 구간과 자막이 비워져요. 바꿀까요?')){e.target.value=ED.source;return}
+  ED.source=f;ED.segments=[];ED.captions=[];ED.range=[0,0];fillVariety();saveEdit()};
+[['vT1','title1'],['vT2','title2'],['vCredit','credit'],['vRights','rights']].forEach(([id,k])=>$(id).oninput=()=>{ED[k]=$(id).value;vBand();saveEdit();renderCheck()});
+$('vRightsOk').onchange=()=>{ED.rightsOk=$('vRightsOk').checked;saveEdit();renderCheck()};
+$('vVh').oninput=()=>{ED.videoH=+$('vVh').value;$('vVhTxt').textContent=`(${ED.videoH}px)`;vBand();vFrame();saveEdit()};
+$('vA').oninput=()=>{ED.range[0]=+$('vA').value;saveEdit();renderTline()};$('vB').oninput=()=>{ED.range[1]=+$('vB').value;saveEdit();renderTline()};
+function setRange(k){ED.range[k]=r1($('vVid').currentTime||0);$(k?'vB':'vA').value=ED.range[k];saveEdit();renderTline()}
+async function pickVarSource(){let r;try{r=await post('/api/pick-video',{target:'variety'})}catch(e){r={error:'nodialog'}}
+  if(r.file){ED.source=r.file;ED.segments=[];ED.captions=[];ED.range=[0,0];await post('/api/variety/edit',{edit:ED});await refresh();fillVariety();if(r.copied)toast('예능/원본 폴더로 복사했어요');return}
+  if(r.error==='nodialog'){openFolder('vsrc');toast('예능/원본 폴더에 영상을 넣고 위 목록에서 골라 주세요')}}
+async function findSpeech(){if(!ED.source)return toast('원본 영상을 먼저 골라 주세요');
+  clearTimeout(edT);await post('/api/variety/edit',{edit:ED});toast('빈 호흡을 찾는 중…');
+  const r=await post('/api/variety/silence',{a:+$('vA').value||0,b:+$('vB').value||0,sens:$('vSens').value});
+  if(r.error)return toast(r.error);const st=await get('/api/state?mode='+MODE);ED=st.edit;ST.editLength=st.editLength;renderVariety._ed=ED;fillVariety();
+  toast(`말하는 구간 ${r.count}개로 나눴어요`)}
+function addSegHere(){if(!ED.source)return toast('원본 영상을 먼저 골라 주세요');const t=r1($('vVid').currentTime||0);
+  ED.segments.push({id:'s'+Math.random().toString(16).slice(2,7),start:t,end:r1(Math.min(t+3,vDur||t+3)),keep:true,hook:false,zoom:1,x:.5});renderSegs();saveEdit()}
+
+/* 타임라인 + 구간 목록 */
+function renderTline(){const box=$('vTline');const a=(ED.range[1]>ED.range[0])?ED.range[0]:0,b=(ED.range[1]>ED.range[0])?ED.range[1]:(vDur||Math.max(1,...vSegs().map(s=>s.end)));
+  const W=b-a||1;box.innerHTML=vSegs().filter(s=>s.end>a&&s.start<b).map(s=>`<b data-id="${s.id}" class="${s.id===vSel?'on':''}" style="left:${(s.start-a)/W*100}%;width:${(s.end-s.start)/W*100}%;background:${s.hook?'#FFB300':s.keep!==false?'#7CDBA8':'#E4E0EC'}"></b>`).join('')+'<div class="ph" id="vPh"></div>';
+  box.onclick=e=>{const id=e.target.dataset&&e.target.dataset.id;if(id)return selSeg(id);const r=box.getBoundingClientRect();$('vVid').currentTime=a+(e.clientX-r.left)/r.width*W;vStop()};
+  box.dataset.a=a;box.dataset.w=W}
+function renderSegs(){const box=$('vSegs');const ss=vSegs();
+  box.innerHTML=ss.length?'':'<p class="muted" style="margin:6px 0 0">아직 구간이 없어요. <b>빈 호흡 찾기</b>를 누르거나 원하는 곳에서 <b>＋ 지금 위치에 구간 추가</b>를 눌러요.</p>';
+  ss.forEach((s,i)=>{const d=document.createElement('div');d.className='seg'+(s.keep===false&&!s.hook?' off':'')+(s.id===vSel?' sel':'');
+    d.innerHTML=`<div class="n">${i+1}</div>
+      <div class="tm"><input class="in" data-k="start" type="number" step="0.1" value="${r1(s.start)}">~<input class="in" data-k="end" type="number" step="0.1" value="${r1(s.end)}"></div>
+      <div class="tg2"><button class="pill2 ${s.keep!==false?'on':''}" data-t="keep">남김</button><button class="pill2 hk ${s.hook?'on':''}" data-t="hook" title="맨 앞에 한 번 더 보여줘요">후킹</button></div>
+      <div class="fr">확대<input type="range" data-k="zoom" min="1" max="2.2" step="0.05" value="${s.zoom||1}">좌우<input type="range" data-k="x" min="0" max="1" step="0.01" value="${s.x??.5}"></div>
+      <div class="ac"><button class="ic" style="background:var(--sky-soft)" title="이 구간 보기" data-a="play">▶</button><button class="ic" style="background:#F1EEF7" title="지금 위치에서 둘로 나누기" data-a="split">✂</button><button class="ic" style="background:var(--coral-soft);color:#C4513F" title="지우기" data-a="del">✕</button></div>`;
+    box.appendChild(d);
+    d.onclick=e=>{if(e.target.closest('input,button'))return;selSeg(s.id)};
+    d.querySelectorAll('[data-k]').forEach(inp=>inp.oninput=()=>{s[inp.dataset.k]=+inp.value;if(inp.dataset.k==='start'||inp.dataset.k==='end')renderTline();vSel=s.id;vFrame(s);saveEdit();vLenTxt()});
+    d.querySelectorAll('[data-k=start],[data-k=end]').forEach(inp=>inp.onchange=()=>renderSegs());
+    d.querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>{const k=b.dataset.t;s[k]=k==='keep'?s.keep===false:!s.hook;renderSegs();saveEdit();vLenTxt();renderCaps()});
+    d.querySelector('[data-a=play]').onclick=()=>{selSeg(s.id);vRun([{seg:s,start:s.start,end:s.end,out:0,hook:false}])};
+    d.querySelector('[data-a=split]').onclick=()=>{const t=r1($('vVid').currentTime||0);if(!(t>s.start+.1&&t<s.end-.1))return toast('미리보기를 이 구간 안의 나눌 곳에 두고 눌러 주세요');
+      ED.segments.push(Object.assign({},s,{id:'s'+Math.random().toString(16).slice(2,7),start:t,hook:false}));s.end=t;renderSegs();saveEdit()};
+    d.querySelector('[data-a=del]').onclick=()=>{ED.segments=ED.segments.filter(x=>x!==s);renderSegs();saveEdit();vLenTxt()}});
+  renderTline()}
+function selSeg(id){vSel=id;const s=ED.segments.find(x=>x.id===id);if(!s)return;vStop();$('vVid').currentTime=s.start;vFrame(s);
+  document.querySelectorAll('#vSegs .seg').forEach((d,i)=>d.classList.toggle('sel',vSegs()[i]&&vSegs()[i].id===id));renderTline()}
+
+/* 대사 자막 */
+function renderCaps(){const box=$('vCaps');const cs=(ED.captions||[]).slice().sort((a,b)=>a.t-b.t);
+  box.innerHTML=cs.length?'':'<p class="muted" style="margin:0">아직 대사 자막이 없어요.</p>';
+  cs.forEach(c=>{const sg=vSegAt(c.t);const d=document.createElement('div');d.className='cap'+(sg&&sg.hook?' hk':'');
+    d.innerHTML=`<button class="ic" style="background:var(--sky-soft)" title="이 위치로">▶</button>
+      <input class="in" data-k="dur" type="number" step="0.1" min="0.3" value="${c.dur}" title="몇 초 동안">
+      <input class="in" data-k="text" value="${esc(c.text)}" placeholder="${fmtT(c.t)} 대사 (예: 제가 누구 따라하는지 봐요~!)">
+      <button class="ic" style="background:var(--coral-soft);color:#C4513F" title="지우기">✕</button>`;
+    box.appendChild(d);const [pl,dl]=d.querySelectorAll('button');
+    pl.onclick=()=>{vStop();$('vVid').currentTime=c.t;vFrame(vSegAt(c.t))};
+    dl.onclick=()=>{ED.captions=ED.captions.filter(x=>x!==c);renderCaps();saveEdit()};
+    d.querySelectorAll('[data-k]').forEach(inp=>inp.oninput=()=>{c[inp.dataset.k]=inp.dataset.k==='text'?inp.value:+inp.value;saveEdit();vTick()})})}
+function addCapHere(){if(!ED.source)return toast('원본 영상을 먼저 골라 주세요');const t=r1($('vVid').currentTime||0);
+  const c={id:'c'+Math.random().toString(16).slice(2,7),t,dur:1.5,text:''};ED.captions.push(c);renderCaps();saveEdit();
+  setTimeout(()=>{const i=ED.captions.slice().sort((a,b)=>a.t-b.t).indexOf(c);const el=document.querySelectorAll('#vCaps [data-k=text]')[i];el&&el.focus()},30)}
+
+/* 미리보기 */
+function fitText(el,max){el.style.fontSize=max+'px';let f=max;while(el.scrollWidth>el.clientWidth+1&&f>14){f-=2;el.style.fontSize=f+'px'}}
+function vBand(){const top=ED.videoTop*VS,vh=ED.videoH*VS;$('vTop').style.height=top+'px';
+  $('vVidBox').style.top=top+'px';$('vVidBox').style.height=vh+'px';$('vBot').style.top=(top+vh)+'px';
+  const t1=$('vT1v'),t2=$('vT2v');t1.textContent=ED.title1||'첫째 줄 제목';t2.textContent=ED.title2||'';t1.style.color=ED.title1Color;t2.style.color=ED.title2Color;
+  t1.style.opacity=ED.title1?1:.35;[t1,t2].forEach(x=>{x.style.width='340px';x.style.overflow='hidden'});fitText(t1,ED.title2?36:42);fitText(t2,36);
+  $('vCredV').textContent=ED.credit||'';$('vCapV').style.top=(vh-230*VS-8)+'px'}
+function vFrame(s){const v=$('vVid'),w=vNat.w,h=vNat.h,vh=ED.videoH;const z=s?Math.max(1,s.zoom||1):1,x=s?(s.x??.5):.5;
+  const sc=Math.max(1080/w,vh/h)*z;v.style.width=(w*sc*VS)+'px';v.style.height=(h*sc*VS)+'px';
+  v.style.left=(-(w*sc-1080)*x*VS)+'px';v.style.top=(-(h*sc-vh)/2*VS)+'px'}
+function vRun(list){if(!list.length)return toast('남길 구간이 없어요');vPlay={list,i:0};const v=$('vVid');v.muted=!$('vSound').checked;v.currentTime=list[0].start;vFrame(list[0].seg);v.play()}
+function playAll(){if(!ED.source)return toast('원본 영상을 먼저 골라 주세요');vRun(vPieces())}
+function vStop(){vPlay=null;$('vVid').pause()}
+$('vSound').onchange=()=>{$('vVid').muted=!$('vSound').checked};
+$('vVid').addEventListener('loadedmetadata',()=>{const v=$('vVid');vNat={w:v.videoWidth||1920,h:v.videoHeight||1080};vDur=v.duration||0;$('vScrub').max=vDur;
+  if(!(ED.range[1]>0)){ED.range=[0,r1(vDur)];$('vB').value=ED.range[1]}vBand();vFrame(vSegAt(0));renderTline()});
+$('vScrub').oninput=()=>{vStop();$('vVid').currentTime=+$('vScrub').value;vFrame(vSegAt(+$('vScrub').value))};
+$('vVid').addEventListener('timeupdate',vTick);
+function vTick(){if(!ED)return;const v=$('vVid'),t=v.currentTime||0;let hook=false,out=null;
+  if(vPlay){let p=vPlay.list[vPlay.i];if(t>=p.end-0.04||t<p.start-0.3){vPlay.i++;if(vPlay.i>=vPlay.list.length){vStop();return}p=vPlay.list[vPlay.i];v.currentTime=p.start;vFrame(p.seg);return}
+    hook=p.hook;out=p.out+(t-p.start)}
+  else vFrame(vSegAt(t));
+  $('vNow').textContent='원본 '+fmtT(t)+(out!=null?' · 완성 '+out.toFixed(1)+'초':'');$('vCapNow').textContent='지금 위치: 원본 '+fmtT(t);
+  if(document.activeElement!==$('vScrub'))$('vScrub').value=t;
+  const ph=$('vPh'),tl=$('vTline');if(ph&&tl.dataset.w)ph.style.left=((t-+tl.dataset.a)/+tl.dataset.w*100)+'%';
+  const c=(ED.captions||[]).find(c=>t>=c.t&&t<c.t+(+c.dur||1.5)&&c.text);const cv=$('vCapV');cv.textContent=c?c.text:'';cv.className='vcap'+(hook&&c?' hook':'');
+  let nt='';if(out!=null&&MODE==='variety'){const ct={};(ST.clipTimes||[]).forEach(x=>ct[x.rank]=x);
+    const ln=LINES.find(l=>{const c=ct[l.clip];if(!c)return false;const a=c.start+(+l.at||0);return out>=a&&out<a+(+l.duration||+l.slot||1.5)});nt=ln?ln.text:''}
+  $('vNarrV').textContent=nt}
+
+/* 점검표 */
+function renderCheck(){if(!$('vCheck'))return;const t=ST.editLength||0,narr=MODE==='variety'?LINES.filter(l=>(l.text||'').trim()).length:null;
+  const items=[[!!ED.source,'원본 영상을 골랐어요'],[vSegs().length>0,`구간을 나눴어요 (빈 호흡 · 필요 없는 대사 정리) — ${vSegs().filter(s=>s.keep!==false).length}개 남김`],
+    [vSegs().some(s=>s.hook),'후킹 구간이 있어요 (첫 1.5초에 제일 센 장면)'],[t>0&&t<=60,`전체 길이 ${t.toFixed(1)}초 (1분 안)`],
+    [narr==null?null:narr>=3,narr==null?'내레이션: 내레이션 탭에서 확인':`내레이션 ${narr}줄 — 해설 · 드립이 들어가야 공정 이용에 유리해요`],
+    [(ED.captions||[]).some(c=>c.text),'대사 자막을 넣었어요'],[!!ED.credit,'출처를 적었어요'],[!!ED.rightsOk,'권리를 확인했어요 (아래 체크)']];
+  const sig=JSON.stringify(items);if($('vCheck').dataset.k===sig)return;$('vCheck').dataset.k=sig;
+  $('vCheck').innerHTML=items.map(([ok,txt])=>`<div class="${ok?'ok':ok===false?'no':''}">${ok?'✅':ok===false?'⬜':'·'} ${esc(txt)}</div>`).join('')}
 
 /* ── 완성 파일 ── */
-function renderOutputs(){const box=$('outs');const want=ST.outputs.map(f=>f+((ST.outTimes||{})[f]||'')).join('|')+(ST.busy||'');if(box.dataset.k===want)return;box.dataset.k=want;
+function renderOutputs(){const box=$(MODE==='variety'?'vouts':'outs');const want=MODE+ST.outputs.map(f=>f+((ST.outTimes||{})[f]||'')).join('|')+(ST.busy||'');if(box.dataset.k===want)return;box.dataset.k=want;
   if(ST.busy)return;box.innerHTML=ST.outputs.length?ST.outputs.map(f=>`<div class="card"><b>${esc(f)}</b><video controls preload="metadata" src="/out/${encodeURIComponent(f)}?t=${(ST.outTimes||{})[f]||0}"></video></div>`).join(''):'<p class="muted">아직 없어요</p>'}
 
 document.querySelectorAll('input').forEach(i=>i.setAttribute('autocomplete','off'));
