@@ -71,3 +71,12 @@ python skills/shorts-tts/shorts_tts.py --video 영상.mp4 --out 완성본.mp4
 ## 라이선스
 
 개인 채널 운영용. 자유롭게 참고해도 좋다.
+
+## 쇼츠 공방 편집기 v2 (2026-11-19)
+
+`editor/편집기.bat` 을 더블클릭하면 브라우저에 편집기가 열린다.
+링크 모으기 → 쇼츠 구성 → Claude 에게 "대본 만들어줘" → 한 번에 완성하기 → "업로드 준비해줘" → 새 쇼츠 시작하기.
+
+- 사용법과 파일 형식: [docs/03-쇼츠-공방-편집기.md](docs/03-쇼츠-공방-편집기.md)
+- Claude 가 하는 일: [skills/shorts-workshop/SKILL.md](skills/shorts-workshop/SKILL.md)
+- 블로그 글과 카드: [blog/naver-02.txt](blog/naver-02.txt), `blog/naver-02/`

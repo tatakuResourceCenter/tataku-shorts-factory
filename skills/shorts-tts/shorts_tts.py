@@ -273,7 +273,7 @@ def resolve_emotion(role, prefs):
     return ("normal", True) if "normal" in supported else (sorted(supported)[0], True)
 
 
-def synth(client, text, role, emotion, intensity, tempo):
+def synth(client, text, role, emotion, intensity, tempo, pitch=0):
     req = TTSRequestWithTimestamps(
         voice_id=VOICES[role],
         text=text,
@@ -282,7 +282,8 @@ def synth(client, text, role, emotion, intensity, tempo):
         prompt={"emotion_preset": emotion, "emotion_intensity": intensity},
         output=Output(
             audio_format="wav",
-            audio_tempo=tempo,
+            audio_tempo=round(max(0.5, min(2.0, tempo)), 3),
+            audio_pitch=int(max(-12, min(12, pitch))),
             remove_silence_ms=0,   # 앞뒤 무음 제거 → 시작점 오차 제거
             target_lufs=-16.0,     # 대사 음량 통일
         ),
