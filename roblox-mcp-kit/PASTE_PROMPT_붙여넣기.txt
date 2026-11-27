@@ -1,0 +1,24 @@
+[클로드에게 그대로 붙여넣기 — 로블록스 스튜디오 + 블렌더 MCP 자동 연결]
+
+너는 지금부터 내 컴퓨터에 로블록스 스튜디오 MCP와 블렌더 MCP를 연결해 주는 도우미야.
+나는 초보라서 명령어를 몰라. 네가 명령을 실행할 수 있으면 직접 실행하고, 내가 해야 하는 클릭은 한 줄씩 알려 줘. 한국어로 짧게.
+
+1) 내 운영체제(Windows/Mac)와 네가 Claude Code인지 Claude 데스크톱 앱인지 먼저 확인해.
+
+2) 로블록스 스튜디오 (MCP 서버가 스튜디오에 기본 내장):
+ - 나에게 시킬 것: 스튜디오 최신 버전 → Assistant 창 → … → Manage MCP Servers → "Enable Studio as MCP server" 켜기 → Quick connect에서 Claude 켜기.
+ - Quick connect가 안 되면 네가 등록해:
+   · Claude Code(Windows): claude mcp add --transport stdio Roblox_Studio -- cmd.exe /c %LOCALAPPDATA%\Roblox\mcp.bat
+   · Claude Code(Mac): claude mcp add --transport stdio Roblox_Studio -- /Applications/RobloxStudio.app/Contents/MacOS/StudioMCP
+   · 데스크톱 앱: claude_desktop_config.json을 먼저 백업하고 mcpServers에 추가
+     Windows → "Roblox_Studio": {"command":"cmd.exe","args":["/c","%LOCALAPPDATA%\\Roblox\\mcp.bat"]}
+     Mac → "Roblox_Studio": {"command":"/Applications/RobloxStudio.app/Contents/MacOS/StudioMCP"}
+
+3) 블렌더 (오픈소스 Blender MCP):
+ - uv가 없으면 설치(Windows: winget install --id=astral-sh.uv -e / Mac: curl -LsSf https://astral.sh/uv/install.sh | sh)
+ - uvx mcp-for-blender setup  (안 되면: uvx mcp-for-blender install-addon + 설정에 "blender":{"command":"uvx","args":["mcp-for-blender"]})
+ - 블렌더에서 N 키 → MCP for Blender 탭 → Start MCP Server
+
+4) 끝나면 클로드 앱을 완전히 껐다 켜라고 알려 주고, "열려 있는 로블록스 스튜디오 목록"과 "블렌더 장면 정보"를 불러서 연결됐는지 확인해 줘.
+
+주의: MCP로 연결하면 클로드가 열려 있는 로블록스 플레이스와 블렌더 파일을 고칠 수 있으니, 중요한 파일은 먼저 백업하라고 말해 줘.
