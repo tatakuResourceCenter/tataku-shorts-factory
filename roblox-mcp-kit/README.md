@@ -3,6 +3,9 @@
 로블록스 스튜디오와 블렌더를 **Claude(클로드)** 에 연결해서, 말로만 시켜도 집을 짓고 캐릭터를 세우고 카메라를 움직이게 만드는 키트예요.
 타타꾸패밀리 「AI로 로블록스 드라마 만들기 DAY 1」 영상에서 소개한 그 방법입니다.
 
+## 📥 다운로드
+👉 **[키트 한 번에 받기 (zip)](https://github.com/tatakuResourceCenter/tataku-shorts-factory/raw/main/roblox-mcp-kit/로블록스_클로드_MCP_연결키트.zip)** — 누르면 바로 다운로드돼요.
+
 ## ⚡ 방법 1 — 붙여넣기만 하면 끝 (추천)
 1. [`PASTE_PROMPT_붙여넣기.txt`](PASTE_PROMPT_붙여넣기.txt) 내용을 **전부 복사**
 2. Claude 데스크톱 앱 또는 Claude Code에 **붙여넣기**
