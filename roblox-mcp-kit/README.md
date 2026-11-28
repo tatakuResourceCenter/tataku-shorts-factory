@@ -3,6 +3,9 @@
 로블록스 스튜디오와 블렌더를 **Claude(클로드)** 에 연결해서, 말로만 시켜도 집을 짓고 캐릭터를 세우고 카메라를 움직이게 만드는 키트예요.
 타타꾸패밀리 「AI로 로블록스 드라마 만들기 DAY 1」 영상에서 소개한 그 방법입니다.
 
+> ❗ **SKILL.md 파일을 채팅창에 그냥 첨부하면 스킬이 설치되지 않아요.** 아래 방법 1(붙여넣기) 또는 방법 2(스킬 설치)로 쓰세요.
+> 💻 클로드가 직접 연결까지 해 주는 건 **Claude 데스크톱 앱 / Claude Code** 에서만 돼요. 웹 채팅(claude.ai)에서는 클릭 순서를 안내해 줘요.
+
 ## 📥 다운로드
 👉 **[키트 한 번에 받기 (zip)](https://github.com/tatakuResourceCenter/tataku-shorts-factory/raw/main/roblox-mcp-kit/로블록스_클로드_MCP_연결키트.zip)** — 누르면 바로 다운로드돼요.
 
@@ -14,7 +17,8 @@
 ## 🧩 방법 2 — 스킬로 설치 (계속 쓰고 싶을 때)
 [`roblox-blender-mcp-setup`](roblox-blender-mcp-setup/) 폴더를 통째로 넣으세요.
 - **Claude Code**: `~/.claude/skills/` (Windows: `C:\Users\<이름>\.claude\skills\`) 안에 복사
-- **Claude 앱**: 폴더를 zip으로 묶어 설정 → 스킬에서 업로드
+- **Claude 앱**: 이 폴더의 [`roblox-blender-mcp-setup.zip`](https://github.com/tatakuResourceCenter/tataku-shorts-factory/raw/main/roblox-mcp-kit/roblox-blender-mcp-setup.zip) 을 그대로 **설정 → 기능(Capabilities) → 스킬 → 업로드**
+  (채팅창에 첨부하는 게 아니에요!)
 
 그다음 클로드에게 **"로블록스 연결해줘"** 라고만 말하면 돼요.
 
