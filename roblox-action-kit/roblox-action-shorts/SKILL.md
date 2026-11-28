@@ -33,6 +33,7 @@ description: 로블록스 스튜디오(MCP 연결)에서 대사 없는 액션 �
 | fire | `{t,"fire","Rocket","Villain","Hero",초,색}` | 투사체 발사. 이름에 Kunai/Arrow가 들어가면 작고 날렵하게, 아니면 로켓(불꽃) |
 | explode | `{t,"explode",위치}` | 흰 섬광 → 불덩이 → 블록 조각 + 흔들림 |
 | hit | `{t,"hit","Villain"}` | 빨간 X 히트마커 + 흔들림 |
+| killfeed | `{t,"killfeed","NINJA","VILLAIN"}` / `{t,"killfeed"}` | 위쪽 처치 알림 바 (끄기는 이름 없이) |
 | freeze | `{t,"freeze",초}` | 화면 정지 + 흑백 ("망했다" 순간) |
 | knock | `{t,"knock","Villain",방향}` | 뒤로 날아가 쓰러짐 |
 

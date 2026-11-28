@@ -46,6 +46,7 @@ local EVENTS = {
 	{ 10.0, "fire", "Kunai", "Hero", "Villain", 1.0, Color3.fromRGB(200, 220, 255) },
 	{ 11.0, "hit", "Villain" },
 	{ 11.0, "freeze", 0.9 },
+	{ 11.1, "killfeed", "NINJA", "VILLAIN" }, { 13.3, "killfeed" },
 	{ 12.0, "knock", "Villain", Vector3.new(-12, 0, -12) },
 	{ 13.4, "card", "ROUND 1", "1 : 0", "NINJA WINS" },
 }
@@ -91,6 +92,9 @@ local hm = Instance.new("TextLabel", gui); hm.Size = UDim2.fromOffset(160, 160);
 hm.BackgroundTransparency = 1; hm.Text = ""; hm.Visible = false
 for _, r in ipairs({ 45, -45 }) do local bar = Instance.new("Frame", hm); bar.AnchorPoint = Vector2.new(0.5, 0.5); bar.Position = UDim2.fromScale(0.5, 0.5); bar.Size = UDim2.fromScale(1, 0.16); bar.Rotation = r; bar.BackgroundColor3 = Color3.fromRGB(255, 40, 40); bar.BorderSizePixel = 0 end
 for _, e in ipairs(Lighting:GetChildren()) do if e:IsA("DepthOfFieldEffect") then e.Enabled = false end end
+local kf = Instance.new("Frame", gui); kf.AnchorPoint = Vector2.new(0.5, 0); kf.Position = UDim2.fromScale(0.5, 0.06); kf.Size = UDim2.fromScale(0.5, 0.06); kf.BackgroundColor3 = Color3.fromRGB(15, 15, 20); kf.BackgroundTransparency = 0.2; kf.Visible = false
+Instance.new("UICorner", kf).CornerRadius = UDim.new(0.5, 0)
+local kft = Instance.new("TextLabel", kf); kft.Size = UDim2.fromScale(1, 1); kft.BackgroundTransparency = 1; kft.Font = Enum.Font.GothamBlack; kft.TextScaled = true; kft.RichText = true; kft.TextColor3 = Color3.new(1, 1, 1)
 local cc = Lighting:FindFirstChild("ActionCC") or Instance.new("ColorCorrectionEffect", Lighting); cc.Name = "ActionCC"
 -- ---------- state ----------
 local objs, moves, shake, freezeUntil, fx = {}, {}, { 0, 0, 0 }, -1, {}
@@ -124,6 +128,7 @@ local function runEvent(e, st)
 	local n = e[2]
 	if n == "card" then card.Visible = true; c1.Text = e[3] or ""; c2.Text = e[4] or ""; c3.Text = e[5] or ""
 	elseif n == "uncard" then card.Visible = false
+	elseif n == "killfeed" then kf.Visible = e[3] ~= nil; if e[3] then kft.Text = ("  %s  <font color='#FF3B3B'>KO</font>  %s  "):format(e[3], e[4] or "") end
 	elseif n == "pose" then pose(e[3], e[4])
 	elseif n == "aim" then local A = actor(e[3]); local sh = A and A:FindFirstChild("RightShoulder", true) -- raise right arm forward (Motor6D or AnimationConstraint rigs)
 		local obj, prop = sh, "C0"; if sh and sh:IsA("AnimationConstraint") then obj, prop = sh.Attachment0, "CFrame" end
